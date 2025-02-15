@@ -46,6 +46,7 @@ const taskSlice = createSlice({
     },
     toggleTheme: (state) => {
       state.theme = state.theme === "light" ? "dark" : "light";
+      // localStorage.setItem("theme", JSON.stringify(state.theme));
     },
   },
 });

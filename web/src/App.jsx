@@ -13,13 +13,30 @@ import {
 import CreateNewTask from "./pages/CreateNewTask";
 import ListTaskItems from "./pages/ListTaskItems";
 import { ToastContainer } from "react-toastify";
+import { useEffect } from "react";
 
 function App() {
   const dispatch = useDispatch();
   const { theme } = useSelector((state) => state.tasks);
   // const [selectedTask, setSelectedTask] = useState(null);
 
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      if (savedTheme !== theme) {
+        dispatch(toggleTheme());
+      }
+      if (savedTheme === "dark") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    }
+  }, [dispatch, theme]);
+
   const handleThemeToggle = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    localStorage.setItem("theme", newTheme);
     dispatch(toggleTheme());
     document.documentElement.classList.toggle("dark");
   };

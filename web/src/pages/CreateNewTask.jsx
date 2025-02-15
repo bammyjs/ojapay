@@ -5,6 +5,7 @@ import { addTask } from "../redux/taskSlice";
 
 const CreateNewTask = () => {
   const dispatch = useDispatch();
+
   return (
     <section className="mt-10 w-full justify-center items-center h-fit flex flex-col md:flex-row gap-4 ">
       <div className="container max-w-7xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">

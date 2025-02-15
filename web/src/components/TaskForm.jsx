@@ -26,6 +26,9 @@ const TaskForm = ({ onAddTask }) => {
     }
 
     setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 5000);
   };
 
   return (

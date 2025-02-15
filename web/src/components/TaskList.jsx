@@ -2,6 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useDrag, useDrop } from "react-dnd";
 import PropTypes from "prop-types";
 import { setFilter, setSearchQuery } from "../redux/taskSlice";
+import { useEffect, useState } from "react";
+import SkeletonLoading from "./extras/SkeletonLoading";
 
 const TaskItem = ({ task, index, moveTask, onSelectTask }) => {
   const [, drag] = useDrag({
@@ -51,6 +53,12 @@ TaskItem.propTypes = {
 const TaskList = ({ onSelectTask }) => {
   const dispatch = useDispatch();
   const { tasks, filter, searchQuery } = useSelector((state) => state.tasks);
+  const [loading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filteredTasks = tasks.filter((task) => {
     const matchesFilter = filter === "all" || task.status === filter;
@@ -109,15 +117,25 @@ const TaskList = ({ onSelectTask }) => {
         className="w-full p-2 mb-4 border border-gray-600 rounded text-gray-600"
       />
       <div className="w-full  mt-4">
-        {filteredTasks.map((task, index) => (
-          <TaskItem
-            key={task.id}
-            task={task}
-            index={index}
-            moveTask={moveTask}
-            onSelectTask={onSelectTask}
-          />
-        ))}
+        {loading ? (
+          <div className="grid pb-8 justify-between overflow-auto  grid-cols-1 gap-2 md:gap-4 md:grid-cols-3 lg:grid-cols-3 ">
+            <SkeletonLoading cards={8} />
+          </div>
+        ) : (
+          <>
+            <div className="grid pb-8 justify-between overflow-auto  grid-cols-1 gap-2 md:gap-4 md:grid-cols-3 lg:grid-cols-3 ">
+              {filteredTasks.map((task, index) => (
+                <TaskItem
+                  key={task.id}
+                  task={task}
+                  index={index}
+                  moveTask={moveTask}
+                  onSelectTask={onSelectTask}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
