@@ -1,6 +1,7 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useDrag, useDrop } from "react-dnd";
 import PropTypes from "prop-types";
+import { setFilter, setSearchQuery } from "../redux/taskSlice";
 
 const TaskItem = ({ task, index, moveTask, onSelectTask }) => {
   const [, drag] = useDrag({
@@ -21,7 +22,7 @@ const TaskItem = ({ task, index, moveTask, onSelectTask }) => {
   return (
     <div
       ref={(node) => drag(drop(node))}
-      className="p-4 border mb-2 bg-white  cursor-move"
+      className="w-full p-4 border mb-2 bg-gray-400 rounded  cursor-move"
       onClick={() => onSelectTask(task)}
     >
       <h3 className="text-lg font-bold text-gray-600">{task.title}</h3>
@@ -48,6 +49,7 @@ TaskItem.propTypes = {
 };
 
 const TaskList = ({ onSelectTask }) => {
+  const dispatch = useDispatch();
   const { tasks, filter, searchQuery } = useSelector((state) => state.tasks);
 
   const filteredTasks = tasks.filter((task) => {
@@ -62,19 +64,61 @@ const TaskList = ({ onSelectTask }) => {
     const updatedTasks = [...tasks];
     const [movedTask] = updatedTasks.splice(fromIndex, 1);
     updatedTasks.splice(toIndex, 0, movedTask);
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   };
 
   return (
-    <div className="mt-4">
-      {filteredTasks.map((task, index) => (
-        <TaskItem
-          key={task.id}
-          task={task}
-          index={index}
-          moveTask={moveTask}
-          onSelectTask={onSelectTask}
-        />
-      ))}
+    <div className="container max-w-7xl bg-blue">
+      <div className="mb-4  flex gap-2 justify-center items-center">
+        <button
+          onClick={() => dispatch(setFilter("all"))}
+          className={
+            filter === "all"
+              ? "!bg-gray-600 text-white p-2 rounded"
+              : "p-2 border rounded "
+          }
+        >
+          All
+        </button>
+        <button
+          onClick={() => dispatch(setFilter("active"))}
+          className={
+            filter === "active"
+              ? "!bg-gray-600 text-white p-2 rounded"
+              : "p-2 border rounded"
+          }
+        >
+          Active
+        </button>
+        <button
+          onClick={() => dispatch(setFilter("completed"))}
+          className={
+            filter === "completed"
+              ? "!bg-gray-600 text-white p-2 rounded"
+              : "p-2 border rounded"
+          }
+        >
+          Completed
+        </button>
+      </div>
+      <input
+        type="text"
+        placeholder="Search tasks..."
+        value={searchQuery}
+        onChange={(e) => dispatch(setSearchQuery(e.target.value))}
+        className="w-full p-2 mb-4 border border-gray-600 rounded text-gray-600"
+      />
+      <div className="w-full  mt-4">
+        {filteredTasks.map((task, index) => (
+          <TaskItem
+            key={task.id}
+            task={task}
+            index={index}
+            moveTask={moveTask}
+            onSelectTask={onSelectTask}
+          />
+        ))}
+      </div>
     </div>
   );
 };

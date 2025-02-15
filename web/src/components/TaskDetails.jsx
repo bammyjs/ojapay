@@ -13,6 +13,11 @@ const TaskDetails = ({ task, onUpdateTask, onClose }) => {
     e.preventDefault();
     onUpdateTask(task.id, editedTask);
     onClose();
+    const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    const updatedTasks = tasks.map((t) =>
+      t.id === task.id ? { ...t, ...editedTask } : t
+    );
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   };
 
   return (

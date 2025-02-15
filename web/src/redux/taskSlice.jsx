@@ -1,17 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 const taskSlice = createSlice({
   name: "tasks",
   initialState: {
-    tasks: [],
+    tasks: JSON.parse(localStorage.getItem("tasks")) || [],
     loading: false,
     error: null,
     filter: "all",
     searchQuery: "",
+    theme: "light",
   },
   reducers: {
     addTask: (state, action) => {
       state.tasks.push(action.payload);
+      localStorage.setItem("tasks", JSON.stringify(state.tasks));
+      toast.success(`New task (${action.payload.title}) Added `);
     },
     updateTask: (state, action) => {
       const index = state.tasks.findIndex(
@@ -22,6 +26,10 @@ const taskSlice = createSlice({
           ...state.tasks[index],
           ...action.payload.updatedTask,
         };
+        localStorage.setItem("tasks", JSON.stringify(state.tasks));
+        toast.success(
+          `(${action.payload.updatedTask.title}) has been Updated `
+        );
       }
     },
     setFilter: (state, action) => {
@@ -36,6 +44,9 @@ const taskSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
+    toggleTheme: (state) => {
+      state.theme = state.theme === "light" ? "dark" : "light";
+    },
   },
 });
 
@@ -46,5 +57,6 @@ export const {
   setSearchQuery,
   setLoading,
   setError,
+  toggleTheme,
 } = taskSlice.actions;
 export default taskSlice.reducer;

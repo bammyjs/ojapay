@@ -1,73 +1,54 @@
-import { useState } from "react";
+// App.jsx
+// import { useState } from "react";
 import { DndProvider } from "react-dnd";
-import TaskDetails from "./components/TaskDetails";
-import TaskForm from "./components/TaskForm";
-import TaskList from "./components/TaskList";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useDispatch, useSelector } from "react-redux";
-import "./App.css";
-import { addTask, setFilter, setSearchQuery, updateTask } from "./redux/taskSlice";
+import { toggleTheme } from "./redux/taskSlice";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import CreateNewTask from "./pages/CreateNewTask";
+import ListTaskItems from "./pages/ListTaskItems";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const dispatch = useDispatch();
-  const { filter, searchQuery } = useSelector((state) => state.tasks);
-  const [selectedTask, setSelectedTask] = useState(null);
+  const { theme } = useSelector((state) => state.tasks);
+  // const [selectedTask, setSelectedTask] = useState(null);
+
+  const handleThemeToggle = () => {
+    dispatch(toggleTheme());
+    document.documentElement.classList.toggle("dark");
+  };
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="min-h-screen p-4 bg-gray-100">
-        <h1 className="text-3xl font-bold mb-6 text-black">Task Manager</h1>
-        <div className="mb-4 flex gap-2 justify-center">
-          <button
-            onClick={() => dispatch(setFilter("all"))}
-            className={
-              filter === "all"
-                ? "bg-blue-600 text-white p-2 rounded"
-                : "p-2 border rounded"
-            }
-          >
-            All
-          </button>
-          <button
-            onClick={() => dispatch(setFilter("active"))}
-            className={
-              filter === "active"
-                ? "bg-blue-600 text-white p-2 rounded"
-                : "p-2 border rounded"
-            }
-          >
-            Active
-          </button>
-          <button
-            onClick={() => dispatch(setFilter("completed"))}
-            className={
-              filter === "completed"
-                ? "bg-blue-600 text-white p-2 rounded"
-                : "p-2 border rounded"
-            }
-          >
-            Completed
-          </button>
+      <ToastContainer />
+      <Router>
+        <div
+          className={`min-h-screen p-4 ${
+            theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-100"
+          }`}
+        >
+          <div className="w-full h-20  px-2 items-center bg-white mb-4 flex justify-between ">
+            <h2 className="text-3xl md:text-4xl text-gray-600 font-bold ">
+              Task Manager
+            </h2>
+            <button onClick={handleThemeToggle} className="p-2 border rounded">
+              Toggle Theme
+            </button>
+          </div>
+
+          <Routes>
+            <Route path="/" element={<CreateNewTask />} />
+            <Route path="/tasks" element={<ListTaskItems />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
         </div>
-        <input
-          type="text"
-          placeholder="Search tasks..."
-          value={searchQuery}
-          onChange={(e) => dispatch(setSearchQuery(e.target.value))}
-          className="w-full p-2 mb-4 border border-black rounded text-black"
-        />
-        <TaskForm onAddTask={(task) => dispatch(addTask(task))} />
-        <TaskList onSelectTask={setSelectedTask} />
-        {selectedTask && (
-          <TaskDetails
-            task={selectedTask}
-            onUpdateTask={(id, updatedTask) =>
-              dispatch(updateTask({ id, updatedTask }))
-            }
-            onClose={() => setSelectedTask(null)}
-          />
-        )}
-      </div>
+      </Router>
     </DndProvider>
   );
 }
