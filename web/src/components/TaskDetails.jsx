@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 const TaskDetails = ({ task, onUpdateTask, onClose }) => {
   const [editedTask, setEditedTask] = useState(task);
@@ -56,4 +57,9 @@ const TaskDetails = ({ task, onUpdateTask, onClose }) => {
   );
 };
 
+TaskDetails.propTypes = {
+  task: PropTypes.object.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onUpdateTask: PropTypes.func.isRequired,
+};
 export default TaskDetails;
