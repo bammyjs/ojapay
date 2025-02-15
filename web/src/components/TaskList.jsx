@@ -10,7 +10,7 @@ const TaskItem = ({ task, index, moveTask, onSelectTask }) => {
     type: "TASK",
     item: { index },
   });
-
+  // TODO: drag and drop not working yet fix this later.
   const [, drop] = useDrop({
     accept: "TASK",
     hover: (draggedItem) => {
