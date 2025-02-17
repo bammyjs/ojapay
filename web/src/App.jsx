@@ -1,7 +1,9 @@
 // App.jsx
 // import { useState } from "react";
 import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { TouchBackend } from "react-dnd-touch-backend";
+
+// import { HTML5Backend } from "react-dnd-html5-backend";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "./redux/taskSlice";
 import {
@@ -42,7 +44,10 @@ function App() {
   };
 
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndProvider
+      backend={TouchBackend}
+      options={{ enableMouseEvents: true, enableTouchEvents: true }}
+    >
       <ToastContainer />
       <Router>
         <div
@@ -60,8 +65,8 @@ function App() {
           </div>
 
           <Routes>
-            <Route path="/" element={<CreateNewTask />} />
-            <Route path="/tasks" element={<ListTaskItems />} />
+            <Route path="/" element={<ListTaskItems />} />
+            <Route path="/create-task" element={<CreateNewTask />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </div>

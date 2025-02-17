@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
 
 const taskSlice = createSlice({
   name: "tasks",
   initialState: {
-    tasks: JSON.parse(localStorage.getItem("tasks")) || [],
+    tasks: [],
     loading: false,
     error: null,
     filter: "all",
@@ -14,9 +13,11 @@ const taskSlice = createSlice({
   reducers: {
     addTask: (state, action) => {
       state.tasks.push(action.payload);
-      localStorage.setItem("tasks", JSON.stringify(state.tasks));
-      toast.success(`New task (${action.payload.title}) Added `);
     },
+    setTasks: (state, action) => {
+      state.tasks = action.payload;
+    },
+
     updateTask: (state, action) => {
       const index = state.tasks.findIndex(
         (task) => task.id === action.payload.id
@@ -26,10 +27,6 @@ const taskSlice = createSlice({
           ...state.tasks[index],
           ...action.payload.updatedTask,
         };
-        localStorage.setItem("tasks", JSON.stringify(state.tasks));
-        toast.success(
-          `(${action.payload.updatedTask.title}) has been Updated `
-        );
       }
     },
     setFilter: (state, action) => {
@@ -52,6 +49,7 @@ const taskSlice = createSlice({
 
 export const {
   addTask,
+  setTasks,
   updateTask,
   setFilter,
   setSearchQuery,

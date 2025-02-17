@@ -7,7 +7,7 @@ const CreateNewTask = () => {
   const dispatch = useDispatch();
 
   return (
-    <section className="mt-10 w-full justify-center items-center h-fit flex flex-col md:flex-row gap-4 ">
+    <section className=" w-full justify-center items-center h-[100vh] flex flex-col md:items-center md:flex-row gap-4 ">
       <div className="container max-w-7xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="md:w-[65%]  h-full item-center ">
           <img className="w-full h-auto rounded" src={taskImage} alt="" />

@@ -1,16 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useDrag, useDrop } from "react-dnd";
 import PropTypes from "prop-types";
-import { setFilter, setSearchQuery } from "../redux/taskSlice";
+import { setError, setFilter, setSearchQuery } from "../redux/taskSlice";
 import { useEffect, useState } from "react";
 import SkeletonLoading from "./extras/SkeletonLoading";
+import { Link, useNavigate } from "react-router-dom";
+import { IoIosInformationCircle, IoMdAdd } from "react-icons/io";
 
 const TaskItem = ({ task, index, moveTask, onSelectTask }) => {
-  const [, drag] = useDrag({
+  // TODO: drag and drop not working yet fix this later.
+
+  const [, ref] = useDrag({
     type: "TASK",
     item: { index },
   });
-  // TODO: drag and drop not working yet fix this later.
+
   const [, drop] = useDrop({
     accept: "TASK",
     hover: (draggedItem) => {
@@ -23,9 +27,10 @@ const TaskItem = ({ task, index, moveTask, onSelectTask }) => {
 
   return (
     <div
-      ref={(node) => drag(drop(node))}
-      className="w-full p-4 border mb-2 bg-gray-400 rounded  cursor-move"
+      ref={(node) => ref(drop(node))}
+      className={`w-full p-4 border mb-2 bg-gray-400 rounded cursor-move `}
       onClick={() => onSelectTask(task)}
+      style={{ touchAction: "none" }}
     >
       <h3 className="text-lg font-bold text-gray-600">{task.title}</h3>
       <p className="text-gray-600">{task.description}</p>
@@ -52,11 +57,12 @@ TaskItem.propTypes = {
 
 const TaskList = ({ onSelectTask }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { tasks, filter, searchQuery } = useSelector((state) => state.tasks);
-  const [loading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1000);
+    const timer = setTimeout(() => setLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -74,6 +80,35 @@ const TaskList = ({ onSelectTask }) => {
     updatedTasks.splice(toIndex, 0, movedTask);
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   };
+
+ 
+
+  // if (setError) {
+  //   return (
+  //     <div className="flex-1 justify-center items-center">
+  //       <p className="text-red-600 text-xl">can not fetch data</p>
+  //     </div>
+  //   );
+  // }
+
+  if (tasks.length === 0) {
+    return (
+      <div className="w-full border border-black rounded justify-center items-center p-5">
+        <span className="w-full flex items-center justify-center">
+          <IoIosInformationCircle size={100} color="gray" />
+        </span>
+        <p className="text-xl text-gray-700 mb-4 font-Inter_500Medium text-center">
+          No tasks available.
+        </p>
+        <Link
+          to={"/create-task"}
+          className="py-3 flex items-center justify-center text-white  bg-black px-4 rounded-xl"
+        >
+          <p className="text-white">Create new Task</p>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="container max-w-7xl bg-blue">
@@ -137,6 +172,13 @@ const TaskList = ({ onSelectTask }) => {
           </>
         )}
       </div>
+      <span
+        onClick={() => navigate("/create-task")}
+        className="bg-purple-600 flex gap-2 animate-pulse p-2 rounded items-center absolute bottom-20 right-10 md:right-[15%]"
+      >
+        Create a new task
+        <IoMdAdd size={25} />
+      </span>
     </div>
   );
 };

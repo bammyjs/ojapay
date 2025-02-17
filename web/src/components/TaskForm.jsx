@@ -1,9 +1,12 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 import { LoadingButton } from "./extras/LoadingButton";
+import { useNavigate } from "react-router-dom";
+import InputField from "./extras/InputField";
+import { IoIosArrowBack } from "react-icons/io";
 
 const TaskForm = ({ onAddTask }) => {
+  const navigate = useNavigate();
   const [task, setTask] = useState({
     title: "",
     description: "",
@@ -40,57 +43,54 @@ const TaskForm = ({ onAddTask }) => {
         <h3 className="text-3xl font-bold mb-4 text-center ">
           Create New Task
         </h3>
-        <label htmlFor="title">Task Title</label>
-        <input
-          required
-          name="title"
+        <InputField
+          name={"title"}
+          labelTitle={"Title"}
           value={task.title}
-          onChange={handleChange}
-          placeholder="Title"
-          className="w-full p-2 mb-2 border rounded"
+          placeholder={"Task Title"}
+          handleChange={handleChange}
         />
-        <label htmlFor="description">Task Description</label>
+
+        <label htmlFor="description">Description</label>
         <textarea
           required
           name="description"
           value={task.description}
           onChange={handleChange}
-          placeholder="Description"
+          placeholder="Task Description"
           className="w-full p-2 mb-2 border rounded"
         />
-        <label htmlFor="dueDate">Task Due Date</label>
-        <input
-          required
-          type="date"
-          name="dueDate"
+        <InputField
+          name={"dueDate"}
+          labelTitle={"Due Date"}
           value={task.dueDate}
-          onChange={handleChange}
-          className="w-full p-2 mb-2 border rounded"
+          type={"date"}
+          handleChange={handleChange}
         />
-        <label htmlFor="priority">Select Task Priority</label>
+
+        <label htmlFor="priority">Select Priority</label>
         <select
           name="priority"
           value={task.priority}
           onChange={handleChange}
-          className="w-full p-2 mb-2 border rounded"
+          className="w-full p-2 mb-4 border rounded"
         >
           <option>Low</option>
           <option>Medium</option>
           <option>High</option>
         </select>
-        <LoadingButton type="submit" isLoading={isLoading}>
-          Add Task
-        </LoadingButton>
-        {/* <button
-          type="submit"
-          className="w-full bg-blue-600 text-white p-2 rounded"
-        >
-          Add Task
-        </button> */}
+        <div className="flex items-center justify-between gap-3  ">
+          <span
+            onClick={() => navigate("/")}
+            className="bg-purple-600 p-2 rounded items-center"
+          >
+            <IoIosArrowBack size={25} color="white"/>
+          </span>
+          <LoadingButton type="submit" isLoading={isLoading}>
+            Add Task
+          </LoadingButton>
+        </div>
       </form>
-      <Link to={"/tasks"} className="">
-        <button className="w-full text-white">View Task List</button>
-      </Link>
     </div>
   );
 };
