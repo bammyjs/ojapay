@@ -7,6 +7,7 @@ import {
   Pressable,
   ActivityIndicator,
   StyleSheet,
+  ScrollView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -26,6 +27,7 @@ import Animated from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import * as Progress from "react-native-progress";
+import "react-native-polyfill-globals/auto";
 
 const TaskList = () => {
   const dispatch = useDispatch();
@@ -34,6 +36,7 @@ const TaskList = () => {
     (state) => state.tasks
   );
   const [filteredTasks, setFilteredTasks] = useState([]);
+  const [taskList, setTaskList] = useState([]);
 
   useEffect(() => {
     const loadTasks = async () => {
@@ -92,22 +95,13 @@ const TaskList = () => {
         : task
     );
 
-    // Update state
     dispatch({ type: "tasks/setTasks", payload: updatedTasks });
-    setFilteredTasks(updatedTasks);
-
-    // Persist the updated tasks to AsyncStorage
     await AsyncStorage.setItem("tasks", JSON.stringify(updatedTasks));
 
-    // Show success message
-    const task = tasks.find((t) => t.id === taskId);
-    const isCompleted = task?.status !== "completed";
     Toast.show({
       type: "success",
-      text1: isCompleted ? "Task Completed" : "Task Incomplete",
-      text2: isCompleted
-        ? `Good job completing "${task?.title}"! 🎯`
-        : `Task "${task?.title}" marked as incomplete.`,
+      text1: "Task Updated",
+      text2: "Task completion status changed successfully 🎯",
     });
   };
 
@@ -149,182 +143,188 @@ const TaskList = () => {
     );
   }
 
-  const handleTaskCompletion = (taskId) => {
-    const updatedTasks = tasks.map((task) =>
-      task.id === taskId ? { ...task, status: "completed" } : task
-    );
-    dispatch({ type: "tasks/setTasks", payload: updatedTasks });
-    AsyncStorage.setItem("tasks", JSON.stringify(updatedTasks));
-  };
-
-  const handleTaskPress = (taskId) => {
-    router.push(`(screens)/taskDetailScreen?id=${taskId}`);
-  };
-
   const completedTasks = tasks.filter(
     (task) => task.status === "completed"
   ).length;
   const progress = tasks.length > 0 ? completedTasks / tasks.length : 0;
 
   return (
-    <View className="w-full p-5 h-full bg-typography-black">
-      <Stack.Screen options={{ headerShown: false }} />
-      <SafeAreaView className="relative h-full w-full top-0 flex items-start mt-4">
-        <View className="w-full flex flex-row items-center justify-between">
-          <Text className="text-4xl max-w-[280] text-primary-50 font-Inter_700Bold">
-            You have {todaysTasks.length} tasks today
-          </Text>
-        </View>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <View className="w-full p-5 h-full bg-typography-black">
+        <Stack.Screen options={{ headerShown: false }} />
+        <SafeAreaView className="relative h-full w-full top-0 flex items-start mt-4">
+          <View className="w-full flex flex-row items-center justify-between my-4">
+            <Text className="text-4xl max-w-[280] text-primary-50 font-Inter_700Bold">
+              You have {todaysTasks.length} tasks today
+            </Text>
+          </View>
 
-        <SearchInput
-          placeholder="Search Tasks Here"
-          value={searchQuery}
-          onChangeText={(text) => {
-            if (typeof text === "string") dispatch(setSearchQuery(text));
-          }}
-          otherStyles="my-4 w-full bg-typography-900 h-14 text-base rounded-xl font-Inter_400Regular"
-        />
-
-        <View className="w-full bg-typography-900 rounded-xl p-4 justify-between gap-1">
-          <Text className="text-xl font-Inter_600SemiBold text-primary-50">
-            Daily Task Progress
-          </Text>
-          <Progress.Bar
-            progress={progress}
-            width={null}
-            height={10}
-            color="green"
-            borderRadius={5}
+          <SearchInput
+            placeholder="Search Tasks Here"
+            value={searchQuery}
+            onChangeText={(text) => {
+              dispatch(setSearchQuery(text));
+              if (text.trim().length > 0) {
+                router.push({
+                  pathname: "/(screens)/viewTaskLists",
+                  params: { search: text },
+                });
+              }
+            }}
+            otherStyles="my-4 w-full bg-typography-900 h-14 text-base rounded-xl font-Inter_400Regular"
           />
-          <Text className="text-primary-50 font-Inter_500Medium text-base">
-            {completedTasks}/{tasks.length} Task(s) Completed
-          </Text>
-        </View>
 
-        <View className="h-4"></View>
-
-        {/* Render Today's Tasks */}
-        <View className="w-full flex flex-row justify-between mb-2">
-          <Text className="text-typography-white font-Inter_600SemiBold text-xl">
-            Today's Task
-          </Text>
-          <Pressable onPress={() => router.push("(screens)/viewTaskLists")}>
-            <Text className="text-primary-500 font-Inter_500Medium text-base text-right mt-2">
-              See All
+          <View className="w-full bg-typography-900 rounded-xl p-4 justify-between gap-1">
+            <Text className="text-xl font-Inter_600SemiBold text-primary-50">
+              Daily Task Progress
             </Text>
-          </Pressable>
-        </View>
-        {todaysTasks.length > 0 ? (
-          todaysTasks.map((task) => (
-            <View
-              key={task.id}
-              className="w-full mb-2 bg-primary-300 rounded-xl justify-between gap-1"
-            >
-              <View className="flex flex-row bg-typography-900 ml-4 p-4 rounded-r-xl items-center justify-between gap-1">
-                <Pressable
-                  onPress={() =>
-                    router.push({
-                      pathname: "/(screens)/taskDetailScreen",
-                      params: {
-                        id: task.id,
-                        title: task.title,
-                        description: task.description,
-                        dueDate: task.dueDate,
-                        status: task.status,
-                      },
-                    })
-                  }
-                  className="flex-1"
-                >
-                  <Text className="text-base font-Inter_600SemiBold text-primary-50">
-                    {task.title ? String(task.title) : "Untitled Task"}
-                  </Text>
-                  <View className="flex flex-row items-center gap-1">
-                    <Ionicons name="calendar" size={15} color="white" />
-                    <Text className="text-primary-50 font-Inter_500Medium text-base">
-                      {task.dueDate ? String(task.dueDate) : "No due date"}
-                    </Text>
-                  </View>
-                </Pressable>
-                <Pressable onPress={() => toggleTaskCompletion(task.id)}>
-                  <Ionicons
-                    name={
-                      task.completed
-                        ? "checkmark-circle"
-                        : "checkmark-circle-outline"
+            <Progress.Bar
+              progress={progress}
+              width={null}
+              height={10}
+              color="green"
+              borderRadius={5}
+            />
+            <Text className="text-primary-50 font-Inter_500Medium text-base">
+              {completedTasks}/{tasks.length} Task(s) Completed
+            </Text>
+          </View>
+
+          <View className="h-4"></View>
+
+          {/* Render Today's Tasks */}
+          <View className="w-full flex flex-row justify-between mb-2">
+            <Text className="text-typography-white font-Inter_600SemiBold text-xl">
+              Today's Task
+            </Text>
+            <Pressable onPress={() => router.push("(screens)/viewTaskLists")}>
+              <Text className="text-primary-500 font-Inter_500Medium text-base text-right mt-2">
+                See All
+              </Text>
+            </Pressable>
+          </View>
+          {todaysTasks.length > 0 ? (
+            todaysTasks.map((task) => (
+              <View
+                key={task.id}
+                className="w-full mb-2 bg-primary-300 rounded-xl justify-between gap-1"
+              >
+                <View className="flex flex-row bg-typography-900 ml-4 p-4 rounded-r-xl items-center justify-between gap-1">
+                  <Pressable
+                    onPress={() =>
+                      router.push({
+                        pathname: "/(screens)/taskDetailScreen",
+                        params: {
+                          id: task.id,
+                          title: task.title,
+                          description: task.description,
+                          dueDate: task.dueDate,
+                          status: task.status,
+                        },
+                      })
                     }
-                    size={20}
-                    color={task.completed ? "#4F46E5" : "#f66747"}
-                  />
-                </Pressable>
-              </View>
-            </View>
-          ))
-        ) : (
-          <Text className="text-primary-50 text-center">
-            No tasks due for today
-          </Text>
-        )}
-        <View className="w-full flex flex-row justify-between mb-2">
-          <Text className="text-typography-white font-Inter_600SemiBold text-xl">
-            Tomorrow Task
-          </Text>
-          <Pressable onPress={() => router.push("(screens)/viewTaskLists")}>
-            <Text className="text-primary-500 font-Inter_500Medium text-base text-right mt-2">
-              See All
-            </Text>
-          </Pressable>
-        </View>
-
-        {tomorrowsTasks.length > 0 ? (
-          tomorrowsTasks.map((task) => (
-            <View
-              key={task.id}
-              className="w-full mb-2 bg-primary-300 rounded-xl justify-between gap-1"
-            >
-              <View className="flex flex-row bg-typography-900 ml-4 p-4 rounded-r-xl items-center justify-between gap-1">
-                <View>
-                  <Text className="text-base font-Inter_600SemiBold text-primary-50">
-                    {task.title ? String(task.title) : "Untitled Task"}
-                  </Text>
-                  <View className="flex flex-row items-center gap-1">
-                    <Ionicons name="calendar" size={15} color="white" />
-                    <Text className="text-primary-50 font-Inter_500Medium text-base">
-                      {task.dueDate ? String(task.dueDate) : "No due date"}
+                    className="flex-1"
+                  >
+                    <Text className="text-base font-Inter_600SemiBold text-primary-50">
+                      {task.title ? String(task.title) : "Untitled Task"}
                     </Text>
-                  </View>
+                    <View className="flex flex-row items-center gap-1">
+                      <Ionicons name="calendar" size={15} color="white" />
+                      <Text className="text-primary-50 font-Inter_500Medium text-base">
+                        {task.dueDate ? String(task.dueDate) : "No due date"}
+                      </Text>
+                    </View>
+                  </Pressable>
+                  <Pressable onPress={() => toggleTaskCompletion(task.id)}>
+                    <Ionicons
+                      name={
+                        task.completed ? "checkbox-outline" : "checkbox-sharp"
+                      }
+                      size={20}
+                      color={task.completed ? "#4F46E5" : "#f66747"}
+                    />
+                  </Pressable>
                 </View>
-                <Pressable onPress={() => toggleTaskCompletion(task.id)}>
-                  <Ionicons
-                    name={
-                      task.completed
-                        ? "checkmark-circle"
-                        : "checkmark-circle-outline"
-                    }
-                    size={20}
-                    color={task.completed ? "#4F46E5" : "#f66747"}
-                  />
-                </Pressable>
               </View>
-            </View>
-          ))
-        ) : (
-          <Text className="text-primary-50 text-center">
-            No tasks due for today
-          </Text>
-        )}
+            ))
+          ) : (
+            <Text className="text-primary-50 text-center">
+              No tasks due for today
+            </Text>
+          )}
+          <View className="w-full flex flex-row justify-between my-2">
+            <Text className="text-typography-white font-Inter_600SemiBold text-xl">
+              Tomorrow Task
+            </Text>
+            <Pressable onPress={() => router.push("(screens)/viewTaskLists")}>
+              <Text className="text-primary-500 font-Inter_500Medium text-base text-right mt-2">
+                See All
+              </Text>
+            </Pressable>
+          </View>
 
-        {/* Floating Add Button */}
-        <IconButton
-          title={"Create New Task"}
-          size={25}
-          name={"add-circle"}
-          handlePress={() => router.push("(screens)/createTask")}
-          containerStyles="px-5 py-3  absolute bottom-10 right-4 bg-primary-500 rounded-full shadow-lg"
-        />
-      </SafeAreaView>
-      <StatusBar backgroundColor="transparent" style="light" />
-    </View>
+          {tomorrowsTasks.length > 0 ? (
+            tomorrowsTasks.map((task) => (
+              <View
+                key={task.id}
+                className="w-full mb-2 bg-primary-300 rounded-xl justify-between gap-1"
+              >
+                <View className="flex flex-row bg-typography-900 ml-4 p-4 rounded-r-xl items-center justify-between gap-1">
+                  <Pressable
+                    onPress={() =>
+                      router.push({
+                        pathname: "/(screens)/taskDetailScreen",
+                        params: {
+                          id: task.id,
+                          title: task.title,
+                          description: task.description,
+                          dueDate: task.dueDate,
+                          status: task.status,
+                        },
+                      })
+                    }
+                    className="flex-1"
+                  >
+                    <Text className="text-base font-Inter_600SemiBold text-primary-50">
+                      {task.title ? String(task.title) : "Untitled Task"}
+                    </Text>
+                    <View className="flex flex-row items-center gap-1">
+                      <Ionicons name="calendar" size={15} color="white" />
+                      <Text className="text-primary-50 font-Inter_500Medium text-base">
+                        {task.dueDate ? String(task.dueDate) : "No due date"}
+                      </Text>
+                    </View>
+                  </Pressable>
+                  <Pressable onPress={() => toggleTaskCompletion(task.id)}>
+                    <Ionicons
+                      name={
+                        task.completed ? "checkbox-outline" : "checkbox-sharp"
+                      }
+                      size={20}
+                      color={task.completed ? "#4F46E5" : "#f66747"}
+                    />
+                  </Pressable>
+                </View>
+              </View>
+            ))
+          ) : (
+            <Text className="text-primary-50 text-center">
+              No tasks due for this day
+            </Text>
+          )}
+
+          {/* Floating Add Button */}
+          <IconButton
+            title={"Create New Task"}
+            size={25}
+            name={"add-circle"}
+            handlePress={() => router.push("(screens)/createTask")}
+            containerStyles="px-5 py-3  absolute bottom-10 right-4 bg-primary-500 rounded-full shadow-lg"
+          />
+        </SafeAreaView>
+        <StatusBar backgroundColor="transparent" style="light" />
+      </View>
+    </ScrollView>
   );
 };
 

@@ -1,50 +1,78 @@
-# Welcome to your Expo app 👋
+# Task Manager App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A simple task management application built with React Native and Expo.
 
-## Get started
+## Features
 
-1. Install dependencies
+- Create, update, and delete tasks
+- Mark tasks as completed
+- View tasks for today and tomorrow
+- Filter tasks by status (All, Active, Completed)
+- Interactive calendar for task due dates
+- Responsive design supporting portrait and landscape modes
+
+## Setup Instructions
+
+1. **Clone the Repository**
+
+   ```bash
+   git clone https://github.com/yourusername/task-manager-app.git
+   cd task-manager-app/mobile-app
+   ```
+
+2. **Install Dependencies**
 
    ```bash
    npm install
    ```
 
-2. Start the app
+3. **Run the App**
 
    ```bash
-    npx expo start
+   npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+4. **Run Tests**
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   ```bash
+   npm test
+   ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Technical Overview
 
-## Get a fresh project
+- **Framework**: React Native with Expo
+- **State Management**: Redux Toolkit
+- **UI Components**: NativeWind for Tailwind-like styles
+- **Navigation**: Expo Router
 
-When you're ready, run:
+## Future Improvements
 
-```bash
-npm run reset-project
-```
+- Add task priority levels
+- Implement notification reminders
+- Optimize performance for larger task lists
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Screenshots
 
-## Learn more
+### Home Screen
 
-To learn more about developing your project with Expo, look at the following resources:
+![Home Screen](./screenshots/Screenshot_20250218_222234_Expo_Go.jpg)
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### Task List
 
-## Join the community
+![Task List](./screenshots/Screenshot_20250218_222241_Expo_Go.jpg)
 
-Join our community of developers creating universal apps.
+### Create Task
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+![Create Task](./screenshots/Screenshot_20250218_222245_Expo_Go.jpg)
+
+### Edit Task
+
+![Edit Task](./screenshots/Screenshot_20250218_222250_Expo_Go.jpg)
+
+### Task Progress
+
+![Task Progress](./screenshots/Screenshot_20250218_222302_Expo_Go.jpg)
+
+---
+
+**Author**: Gbenga Bayode | [GitHub](https://github.com/bammyjs)

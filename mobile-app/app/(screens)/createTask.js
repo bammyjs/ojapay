@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
+  ScrollView,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { addTask } from "../../redux/taskSlice";
@@ -107,98 +108,100 @@ const TaskForm = () => {
   };
 
   return (
-    <View className="w-full p-5 h-full bg-typography-black">
-      <Stack.Screen options={{ headerShown: false }} />
-      <SafeAreaView className="w-full top-0 flex justify-center items-center mt-4">
-        {/* Header */}
-        <View className="w-full mb-6 flex flex-row items-center">
-          <IconButton
-            handlePress={() => router.back()}
-            name="arrow-back-circle-outline"
-            size={40}
-            containerStyles="items-center rounded"
-            textStyles="text-typography-700"
-          />
-          <Text className="w-full text-3xl  text-primary-50 font-Inter_600SemiBold ml-4">
-            Create a New Task
-          </Text>
-        </View>
-
-        {/* Date Picker */}
-        <View className=" w-full   rounded-lg">
-          <Text className="text-lg text-typography-white font-Inter_600SemiBold mb-2">
-            Select Due Date:
-          </Text>
-          <View
-            style={styles.container}
-            className=" w-full h-[300] bg-gray-900  rounded-lg"
-          >
-            <DateTimePicker
-              mode="single"
-              date={selectedDate || new Date()}
-              onChange={handleDateChange}
-              textColor="#ffffff"
-              selectedItemColor="#4F46E5"
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <View className="w-full p-5 h-full bg-typography-black">
+        <Stack.Screen options={{ headerShown: false }} />
+        <SafeAreaView className="w-full top-0 flex justify-center items-center mt-4">
+          {/* Header */}
+          <View className="w-full mb-6 flex flex-row items-center">
+            <IconButton
+              handlePress={() => router.back()}
+              name="arrow-back-circle-outline"
+              size={40}
+              containerStyles="items-center rounded"
+              textStyles="text-typography-700"
             />
-          </View>
-          {task.dueDate && (
-            <Text className="text-sm text-grayscale-50 font-Inter_600SemiBold mt-2">
-              Selected Date: {task.dueDate}
+            <Text className="w-full text-3xl  text-primary-50 font-Inter_600SemiBold ml-4">
+              Create a New Task
             </Text>
-          )}
-        </View>
+          </View>
 
-        {/* Task Title Input */}
-        <FormField
-          value={task.title}
-          handleChangeText={(text) => setTask({ ...task, title: text })}
-          placeholder="Task Title"
-          otherStyles=""
-        />
-
-        {/* Task Description Input */}
-        <FormField
-          value={task.description}
-          handleChangeText={(text) => setTask({ ...task, description: text })}
-          placeholder="Task Description"
-          otherStyles=""
-        />
-
-        {/* Priority Selection */}
-        <Text className="w-full text-lg text-typography-white font-Inter_600SemiBold text-left mt-4 mb-2">
-          Priority
-        </Text>
-        <FlatList
-          data={PRIORITY_OPTIONS}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item) => item.label}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              key={item}
-              className={`border-2 w-28 h-fit  py-2 px-4 mr-3 rounded-full  justify-center items-center ${
-                selectedPriority === item.label
-                  ? `${item.color} border-primary-400`
-                  : "bg-gray-500 border-gray-600"
-              }`}
-              onPress={() => handlePrioritySelection(item.label)}
+          {/* Date Picker */}
+          <View className=" w-full   rounded-lg">
+            <Text className="text-lg text-typography-white font-Inter_600SemiBold mb-2">
+              Select Due Date:
+            </Text>
+            <View
+              style={styles.container}
+              className=" w-full h-[300] bg-gray-900  rounded-lg"
             >
-              <Text className="text-primary-50 font-Inter_500Medium text-lg">
-                {item.label}
+              <DateTimePicker
+                mode="single"
+                date={selectedDate || new Date()}
+                onChange={handleDateChange}
+                textColor="#ffffff"
+                selectedItemColor="#4F46E5"
+              />
+            </View>
+            {task.dueDate && (
+              <Text className="text-sm text-grayscale-50 font-Inter_600SemiBold mt-2">
+                Selected Date: {task.dueDate}
               </Text>
-            </TouchableOpacity>
-          )}
-        />
+            )}
+          </View>
 
-        {/* Submit Button */}
-        <PrimaryButton
-          title="Add Task"
-          handlePress={handleAddTask}
-          containerStyles="w-full items-center min-h-[62px] rounded-2xl mt-6"
-        />
-      </SafeAreaView>
-      <StatusBar backgroundColor="transparent" style="light" />
-    </View>
+          {/* Task Title Input */}
+          <FormField
+            value={task.title}
+            handleChangeText={(text) => setTask({ ...task, title: text })}
+            placeholder="Task Title"
+            otherStyles=""
+          />
+
+          {/* Task Description Input */}
+          <FormField
+            value={task.description}
+            handleChangeText={(text) => setTask({ ...task, description: text })}
+            placeholder="Task Description"
+            otherStyles=""
+          />
+
+          {/* Priority Selection */}
+          <Text className="w-full text-lg text-typography-white font-Inter_600SemiBold text-left mt-4 mb-2">
+            Priority
+          </Text>
+          <FlatList
+            data={PRIORITY_OPTIONS}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item) => item.label}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                key={item}
+                className={`border-2 w-28 h-fit  py-2 px-4 mr-3 rounded-full  justify-center items-center ${
+                  selectedPriority === item.label
+                    ? `${item.color} border-primary-400`
+                    : "bg-gray-500 border-gray-600"
+                }`}
+                onPress={() => handlePrioritySelection(item.label)}
+              >
+                <Text className="text-primary-50 font-Inter_500Medium text-lg">
+                  {item.label}
+                </Text>
+              </TouchableOpacity>
+            )}
+          />
+
+          {/* Submit Button */}
+          <PrimaryButton
+            title="Add Task"
+            handlePress={handleAddTask}
+            containerStyles="w-full items-center min-h-[62px] rounded-2xl mt-6"
+          />
+        </SafeAreaView>
+        <StatusBar backgroundColor="transparent" style="light" />
+      </View>
+    </ScrollView>
   );
 };
 

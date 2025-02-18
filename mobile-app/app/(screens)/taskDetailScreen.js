@@ -120,7 +120,7 @@ const TaskDetailScreen = () => {
             flex: 1,
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "#1F2937",
+            backgroundColor: "#262627",
             opacity: fadeAnim,
             borderRadius: 15,
             padding: 20,

@@ -53,6 +53,19 @@ const ViewTaskLists = () => {
     loadTasks();
   }, [dispatch]);
 
+  useEffect(() => {
+    const query = params.search || "";
+    dispatch(setSearchQuery(query));
+    if (query) {
+      const filtered = tasks.filter((task) =>
+        task.title.toLowerCase().includes(query.toLowerCase())
+      );
+      setTaskList(filtered);
+    } else {
+      setTaskList(tasks);
+    }
+  }, [params.search, tasks]);
+
   //Here is to handle refresh
   const onRefresh = async () => {
     setRefreshing(true);
@@ -131,7 +144,6 @@ const ViewTaskLists = () => {
       onPress={() =>
         router.push({ pathname: "/(screens)/taskDetailScreen", params: item })
       }
-     
     >
       <Text className="text-primary-50 font-Inter_600SemiBold text-lg">
         {item.title ? String(item.title) : "Untitled Task"}
@@ -204,12 +216,17 @@ const ViewTaskLists = () => {
           </View>
           <SearchInput
             placeholder="Search Tasks Here"
-            value={setSearchQuery}
+            value={searchQuery}
             onChangeText={(text) => {
-              if (typeof text === "string") dispatch(setSearchQuery(text));
+              dispatch(setSearchQuery(text));
+              const filteredTasks = tasks.filter((task) =>
+                task.title.toLowerCase().includes(text.toLowerCase())
+              );
+              setTaskList(filteredTasks);
             }}
             otherStyles="my-4 w-full bg-typography-900 h-14 text-base rounded-xl font-Inter_400Regular"
           />
+
           {taskList.length === 0 ? (
             <View className="flex-1 items-center justify-center">
               <Ionicons
