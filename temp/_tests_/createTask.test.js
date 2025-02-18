@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
-import TaskForm from "../(screens)/createTask";
+import TaskForm from "../../mobile/app/(screens)/createTask";
 
 test("renders TaskForm screen and adds task", () => {
   const { getByPlaceholderText, getByText } = render(<TaskForm />);

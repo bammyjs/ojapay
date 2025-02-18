@@ -1,20 +1,12 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
+    "name": "mobile-app",
+    "slug": "mobile-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
-    "extra": {
-      "EXPO_ROUTER_APP_ROOT": "app"
-    },
     "userInterfaceStyle": "automatic",
-    "splash": {
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff",
-      "padding": "30px"
-    },
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true

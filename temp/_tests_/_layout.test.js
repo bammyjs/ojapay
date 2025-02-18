@@ -1,8 +1,8 @@
 import React from "react";
 import { render } from "@testing-library/react-native";
 import { Provider } from "react-redux";
-import store from "../../redux/store";
-import Layout from "../_layout";
+import store from "../../mobile/redux/store";
+import Layout from "../../mobile/app/_layout";
 
 describe("App Layout", () => {
   it("renders the layout with correct screens", () => {
@@ -27,3 +27,10 @@ describe("App Layout", () => {
     expect(getByTestId("toast-root")).toBeTruthy();
   });
 });
+
+
+
+
+
+
+ "test": "jest --watchAll --transformIgnorePatterns \"node_modules/(?!(react-native|@react-native|react-native-reanimated|react-navigation|@react-navigation|react-native-gesture-handler|react-redux)/)"
