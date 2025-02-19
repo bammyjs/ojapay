@@ -41,7 +41,7 @@ const TaskItem = ({ task, onDeleteTask, onEditTask }) => {
             setModalOpen(true);
           }}
         >
-          <h3 className="capitalize text-xl font-medium text-white">
+          <h3 className="capitalize text-base md:text-xl font-medium text-white">
             {shortenText(task.title, 20)}
           </h3>
           <p className="capitalize text-sm text-gray-300">

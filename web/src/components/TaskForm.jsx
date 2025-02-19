@@ -25,7 +25,7 @@ const TaskForm = ({ onAddTask }) => {
     const formattedDate = date ? format(date, "yyyy-MM-dd") : "";
     setTask({ ...task, dueDate: formattedDate });
 
-    document.getElementById("daypicker-modal").classList.add("hidden");
+    // document.getElementById("daypicker-modal").classList.add("hidden");
   };
 
   const handlePriorityChange = (priority) => {
@@ -94,13 +94,13 @@ const TaskForm = ({ onAddTask }) => {
               .classList.toggle("hidden")
           }
           placeholder="Select Due Date"
-          className="w-full p-2 mb-2 border rounded cursor-pointer "
+          className="hidden md:block w-full p-2 mb-2 border rounded cursor-pointer "
         />
 
         {/* DayPicker Modal */}
         <div
           id="daypicker-modal"
-          className="hidden absolute z-50 bg-gray-400 p-4 border shadow-lg rounded"
+          className="  md:absolute z-50 bg-gray-400 p-4 border shadow-lg rounded"
         >
           <DayPicker
             mode="single"
@@ -113,7 +113,9 @@ const TaskForm = ({ onAddTask }) => {
             }
           />
         </div>
-        <label htmlFor="priority" className="block mb-1 text-sm font-medium">Select Priority</label>
+        <label htmlFor="priority" className="block mb-1 text-sm font-medium">
+          Select Priority
+        </label>
         <div className="flex gap-2 mb-4 justify-cente">
           {["Low", "Medium", "High"].map((level) => (
             <button
