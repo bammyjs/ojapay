@@ -1,16 +1,60 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { updateTask } from "../redux/taskSlice";
 import { useDispatch } from "react-redux";
+import { DayPicker } from "react-day-picker";
+import format from "date-fns/format";
 import { motion } from "framer-motion";
 
 const TaskModal = ({ isOpen, task, isEditMode, onClose }) => {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState(task || {});
+  const [selectedDate, setSelectedDate] = useState(null);
+  const modalRef = useRef(null);
+  const datePickerRef = useRef(null);
+
+  const parseDate = (dateString) => {
+    const timestamp = Date.parse(dateString);
+    return isNaN(timestamp) ? null : new Date(dateString);
+  };
 
   useEffect(() => {
-    setFormData(task || {});
+    if (task) {
+      setFormData(task);
+      setSelectedDate(task.dueDate ? parseDate(task.dueDate) : null);
+    }
   }, [task]);
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    const formattedDate = date ? format(date, "yyyy-MM-dd") : "";
+    setFormData({ ...formData, dueDate: formattedDate });
+
+    document.getElementById("daypicker-modal-edit").classList.add("hidden");
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        onClose();
+      }
+
+      if (
+        datePickerRef.current &&
+        !datePickerRef.current.contains(event.target)
+      ) {
+        document.getElementById("daypicker-modal-edit").classList.add("hidden");
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen || !task) return null;
 
@@ -26,6 +70,7 @@ const TaskModal = ({ isOpen, task, isEditMode, onClose }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <motion.div
+        ref={modalRef}
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.8 }}
@@ -70,18 +115,57 @@ const TaskModal = ({ isOpen, task, isEditMode, onClose }) => {
         {/* Task Due Date */}
         <label className="block mt-3 mb-2 text-sm font-medium">Due Date</label>
         <input
-          type="date"
+          type="text"
+          readOnly
+          disabled={!isEditMode}
+          value={selectedDate ? format(selectedDate, "yyyy-MM-dd") : ""}
+          onClick={() =>
+            document
+              .getElementById("daypicker-modal-edit")
+              .classList.toggle("hidden")
+          }
           className={`capitalize ${
             isEditMode
-              ? "w-full p-2 border rounded"
+              ? "w-full cursor-pointer p-2 border rounded"
               : "w-full p-2 border border-gray-600 rounded bg-gray-800 "
           }`}
-          value={formData.dueDate || ""}
-          onChange={(e) =>
-            setFormData({ ...formData, dueDate: e.target.value })
-          }
-          disabled={!isEditMode}
         />
+
+        <div
+          ref={datePickerRef}
+          id="daypicker-modal-edit"
+          className="hidden absolute z-50 bg-gray-400 p-4 border shadow-lg rounded"
+        >
+          <DayPicker
+            mode="single"
+            selected={selectedDate}
+            onSelect={handleDateChange}
+          />
+        </div>
+
+        <label className="block mt-4 mb-2 text-sm font-medium">Priority</label>
+        {isEditMode ? (
+          <div className="flex gap-2 mb-4">
+            {["Low", "Medium", "High"].map((level) => (
+              <button
+                key={level}
+                type="button"
+                onClick={() => setFormData({ ...formData, priority: level })}
+                className={`py-2 px-4 w-32 rounded ${
+                  formData.priority === level
+                    ? "bg-purple-600 text-white"
+                    : "bg-gray-200 text-gray-500"
+                }`}
+              >
+                {level}
+              </button>
+            ))}
+          </div>
+        ) : (
+          <p className="capitalize text-sm text-gray-300 mb-4">
+            {formData.priority}
+          </p>
+        )}
         <label className="block mt-3 mb-2 text-sm font-medium">Status</label>
         <input
           type="text"

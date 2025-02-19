@@ -11,7 +11,9 @@ const InputField = ({
 }) => {
   return (
     <div>
-      <label htmlFor={name}>{labelTitle}</label>
+      <label htmlFor={name} className="block mb-1 text-sm font-medium">
+        {labelTitle}
+      </label>
       <input
         required
         type={type}
