@@ -16,7 +16,7 @@ import CreateNewTask from "./pages/CreateNewTask";
 import ListTaskItems from "./pages/ListTaskItems";
 import { ToastContainer } from "react-toastify";
 import { useEffect } from "react";
-import ThemeToggle from "./components/extras/ToggleTheme";
+import Header from "./components/Header";
 
 function App() {
   const dispatch = useDispatch();
@@ -50,12 +50,7 @@ function App() {
             theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-100"
           }`}
         >
-          <div className="fixed container max-w-7xl md:mt-4  md:rounded-3xl w-full bg-white shadow-md z-50 px-2 flex items-center justify-between h-20">
-            <h2 className="text-3xl md:text-4xl text-gray-600 font-bold">
-              Task Manager
-            </h2>
-            <ThemeToggle />
-          </div>
+          <Header />
           <div className="mt-24 w-full container max-w-7xl">
             <Routes>
               <Route path="/" element={<ListTaskItems />} />

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { updateTask } from "../redux/taskSlice";
 import { useDispatch } from "react-redux";
+import { motion } from "framer-motion";
 
 const TaskModal = ({ isOpen, task, isEditMode, onClose }) => {
   const dispatch = useDispatch();
@@ -24,7 +25,13 @@ const TaskModal = ({ isOpen, task, isEditMode, onClose }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-gray-700 p-6 rounded-lg w-96">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.8 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="bg-gray-700 p-6 rounded-lg w-96"
+      >
         <h2 className="text-xl font-bold mb-4">
           {isEditMode ? "Edit Task" : "Task Details"}
         </h2>
@@ -105,7 +112,7 @@ const TaskModal = ({ isOpen, task, isEditMode, onClose }) => {
             </button>
           )}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

@@ -7,6 +7,8 @@ import Column from "./column";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import TaskModal from "./TaskModal";
+import { motion } from "framer-motion";
+import DragHint from "./extras/DragHint";
 
 const COLUMNS = [
   { id: "all", title: "All" },
@@ -106,6 +108,7 @@ const TaskList = () => {
 
   return (
     <div className="container max-w-7xl bg-blue">
+      <DragHint />
       {/* Filter Tabs */}
       <div className="mb-4 flex gap-2 justify-center items-center">
         {COLUMNS.map((column) => (
@@ -149,13 +152,15 @@ const TaskList = () => {
       </div>
 
       {/* Floating Add Task Button */}
-      <span
+      <motion.span
         onClick={() => navigate("/create-task")}
-        className="bg-purple-600 flex gap-2 animate-pulse p-2 rounded items-center absolute bottom-20 right-10 md:right-[15%]"
+        className="fixed bottom-10 right-10 bg-purple-600 flex gap-2 p-3 rounded-full shadow-lg cursor-pointer"
+        whileHover={{ scale: 1.1 }}
+        animate={{ y: [0, -5, 0] }}
+        transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
       >
-        Create a new task
-        <IoMdAddCircle size={25} />
-      </span>
+        <IoMdAddCircle size={30} className="text-white" />
+      </motion.span>
 
       {/* Task Modal for Editing/Viewing */}
       <TaskModal

@@ -4,6 +4,7 @@ import { shortenText } from "../utils";
 import { IoMdTrash, IoMdCreate, IoMdEye, IoMdCalendar } from "react-icons/io";
 import { useState } from "react";
 import TaskModal from "./TaskModal";
+import { motion } from "framer-motion";
 
 const TaskItem = ({ task, onDeleteTask, onEditTask }) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -21,9 +22,14 @@ const TaskItem = ({ task, onDeleteTask, onEditTask }) => {
   return (
     <>
       {/* Main Task Card */}
-      <div className="flex p-2 justify-between rounded-lg bg-gray-700 shadow-sm hover:shadow-md">
+      <div className="w-full flex p-2 justify-between rounded-lg bg-gray-700 shadow-sm hover:shadow-md">
         {/* Draggable Section */}
-        <div
+        <motion.div
+          whileHover={{
+            scale: 1.0,
+            boxShadow: "0px 0px 10px rgba(255,255,255,0.2)",
+          }}
+          transition={{ duration: 0.2 }}
           ref={setNodeRef}
           {...listeners}
           {...attributes}
@@ -47,7 +53,7 @@ const TaskItem = ({ task, onDeleteTask, onEditTask }) => {
           <p className="capitalize text-sm text-gray-300">
             Status: {task.status}
           </p>
-        </div>
+        </motion.div>
 
         {/* Menu */}
         <div className="w-16 flex flex-col items-center space-y-2  bg-gray-800 text-white rounded-md shadow-md py-2 md:p-2 z-10">
