@@ -35,7 +35,7 @@ const TaskForm = ({ onAddTask }) => {
   };
 
   return (
-    <div className="md:w-[30%] p-4 text-black text-left rounded bg-gray-300">
+    <div className="md:w-4xl w-full p-4 text-black text-left rounded bg-gray-300">
       <form
         onSubmit={handleSubmit}
         className="border border-black p-4 rounded mb-4 "
