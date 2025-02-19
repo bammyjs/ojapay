@@ -11,7 +11,7 @@ const InputField = ({
 }) => {
   return (
     <div>
-      <label htmlFor={name} className="block mb-1 text-sm font-medium">
+      <label htmlFor={name} className="block text-white mb-1 text-sm font-medium">
         {labelTitle}
       </label>
       <input
@@ -21,7 +21,7 @@ const InputField = ({
         value={value}
         onChange={handleChange}
         placeholder={placeholder}
-        className={`${otherStyles} w-full p-2 mb-2 border rounded`}
+        className={`${otherStyles} text-white w-full p-2 mb-2 border border-gray-300 rounded`}
       />
     </div>
   );

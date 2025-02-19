@@ -53,15 +53,18 @@ const TaskForm = ({ onAddTask }) => {
   };
 
   return (
-    <div className=" w-full  text-black text-left rounded bg-gray-300">
+    <div className=" w-full  text-black text-left rounded-2xl bg-gray-800">
       <form
         onSubmit={handleSubmit}
-        className="border border-black p-4 rounded mb-4 "
+        className=" border-black p-4 rounded mb-4 "
       >
-        <h3 className="text-3xl font-bold mb-4 text-center ">
+        <h3 className="text-3xl text-white font-bold mb-4 text-center ">
           Create New Task
         </h3>
-        <label htmlFor="dueDate" className="block mb-1 text-sm font-medium">
+        <label
+          htmlFor="dueDate"
+          className="block text-white mb-1 text-sm font-medium"
+        >
           Due Date
         </label>
         <input
@@ -80,7 +83,7 @@ const TaskForm = ({ onAddTask }) => {
         {/* DayPicker Modal */}
         <div
           id="daypicker-modal"
-          className=" mb-2 md:absolute z-50 bg-gray-400 p-4 border shadow-lg rounded"
+          className="text-white mb-2 md:absolute z-50 bg-gray-900 p-4 border border-gray-300 shadow-lg flex items-center justify-center rounded-2xl"
         >
           <DayPicker
             mode="single"
@@ -101,7 +104,7 @@ const TaskForm = ({ onAddTask }) => {
           handleChange={handleChange}
         />
 
-        <label htmlFor="description" className="block mb-1 text-sm font-medium">
+        <label htmlFor="description" className="block text-white mb-1 text-sm font-medium">
           Description
         </label>
         <textarea
@@ -110,10 +113,10 @@ const TaskForm = ({ onAddTask }) => {
           value={task.description}
           onChange={handleChange}
           placeholder="Task Description"
-          className="w-full p-2  border rounded"
+          className="w-full p-2 text-white border border-gray-300 rounded"
         />
 
-        <label htmlFor="priority" className="block mb-1 text-sm font-medium">
+        <label htmlFor="priority" className="block text-white mb-1 text-sm font-medium">
           Select Priority
         </label>
         <div className="flex gap-2 mb-4 justify-cente">
@@ -124,8 +127,8 @@ const TaskForm = ({ onAddTask }) => {
               onClick={() => handlePriorityChange(level)}
               className={`py-2 px-4 w-32 rounded ${
                 task.priority === level
-                  ? "bg-purple-600 text-white"
-                  : "bg-gray-200 text-gray-500"
+                  ? "!bg-gray-900 text-white"
+                  : "!bg-gray-300 text-gray-500"
               }`}
             >
               {level}

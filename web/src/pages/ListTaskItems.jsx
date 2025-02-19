@@ -8,7 +8,7 @@ const ListTaskItems = () => {
   const dispatch = useDispatch();
   const [selectedTask, setSelectedTask] = useState(null);
   return (
-    <section className="   mt-10 w-full justify-center items-center h-fit flex flex-col md:flex-row gap-4 ">
+    <section className="   md:mt-10 w-full justify-center items-center h-fit flex flex-col md:flex-row gap-4 ">
       <TaskList onSelectTask={setSelectedTask} />
       {selectedTask && (
         <TaskDetails
