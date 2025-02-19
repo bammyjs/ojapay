@@ -3,9 +3,9 @@
 A **Task Management** app built with **React (Vite)**, Redux, and **Drag & Drop** support using `@dnd-kit/core`.  
 This app allows users to **create, edit, delete, search, and drag tasks** between categories.
 
-## 🚀 Live Demo  
+## 🚀 Live Demo
 
-🔗 **[Deployed App URL](https://your-deployed-url.com)** (Replace with actual link)
+🔗 **[Deployed App URL](https://** )
 
 ## 📌 Features
 
@@ -13,7 +13,7 @@ This app allows users to **create, edit, delete, search, and drag tasks** betwee
 ✅ **Drag & Drop** tasks between columns  
 ✅ **Search tasks** by title  
 ✅ **Dark/Light theme toggle**  
-✅ **Persistent Storage** (Local Storage)  
+✅ **Persistent Storage** (Local Storage)
 
 ---
 
@@ -40,35 +40,35 @@ npm run dev
 
 ### **4️⃣ Open in Browser**
 
-Navigate to: **[http://localhost:5173](http://localhost:5173)**  
+Navigate to: **[http://localhost:5173](http://localhost:5173)**
 
 ---
 
 ## 🏗️ Architecture Overview
 
-- **Frontend**: React + Vite ⚡  
-- **State Management**: Redux Toolkit  
-- **Drag & Drop**: `@dnd-kit/core`  
-- **Routing**: React Router  
-- **UI Library**: Tailwind CSS  
-- **Persistence**: Local Storage  
+- **Frontend**: React + Vite ⚡
+- **State Management**: Redux Toolkit
+- **Drag & Drop**: `@dnd-kit/core`
+- **Routing**: React Router
+- **UI Library**: Tailwind CSS
+- **Persistence**: Local Storage
 
 ---
 
 ## ⚠️ Known Limitations
 
-- No backend (Tasks are stored in **Local Storage**).  
-- Drag & Drop **may not work** in some older browsers.  
+- No backend (Tasks are stored in **Local Storage**).
+- Drag & Drop **may not work** in some older browsers.
 - Touch devices require **long-press** for drag support.
 
 ---
 
 ## 🔮 Future Improvements
 
-- ✅ **Backend API** for task storage  
-- ✅ **User Authentication**  
-- ✅ **Collaboration (Multiple users)**  
-- ✅ **Drag & Drop enhancements for touch devices**  
+- ✅ **Backend API** for task storage
+- ✅ **User Authentication**
+- ✅ **Collaboration (Multiple users)**
+- ✅ **Drag & Drop enhancements for touch devices**
 
 ---
 
@@ -82,7 +82,7 @@ Navigate to: **[http://localhost:5173](http://localhost:5173)**
 
 ---
 
-## 🌐 Deployment  
+## 🌐 Deployment
 
 This app is deployed on **[Netlify]**.  
 You can deploy using:
@@ -95,11 +95,11 @@ Then, upload the **`dist/`** folder to **Netlify**.
 
 ---
 
-## ✨ Contributors  
+## ✨ Contributors
 
-👤 **Gbenga Bayode** – [GitHub](https://github.com/bammyjs)  
+👤 **Gbenga Bayode** – [GitHub](https://github.com/bammyjs)
 
 ---
 
 **📌 MIT License**  
-This project is licensed under the **MIT License** – free to use & modify.  
+This project is licensed under the **MIT License** – free to use & modify.
