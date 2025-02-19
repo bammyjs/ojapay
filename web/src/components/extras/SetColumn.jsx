@@ -1,9 +1,9 @@
 import { useDroppable } from "@dnd-kit/core";
-import TaskItem from "./TaskItem";
+import TaskItem from "../TaskItem";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 
-const Column = ({
+const SetColumn = ({
   column,
   tasks,
   onSelectTask,
@@ -43,7 +43,7 @@ const Column = ({
   );
 };
 
-Column.propTypes = {
+SetColumn.propTypes = {
   column: PropTypes.object.isRequired,
   tasks: PropTypes.array.isRequired,
   onSelectTask: PropTypes.func.isRequired,
@@ -52,4 +52,4 @@ Column.propTypes = {
   onToggleComplete: PropTypes.func.isRequired,
 };
 
-export default Column;
+export default SetColumn;

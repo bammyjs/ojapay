@@ -3,12 +3,13 @@ import { setTasks, setSearchQuery, setFilter } from "../redux/taskSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosInformationCircle, IoMdAddCircle } from "react-icons/io";
 import { DndContext } from "@dnd-kit/core";
-import Column from "./column";
+
 import PropTypes from "prop-types";
 import { useState } from "react";
 import TaskModal from "./TaskModal";
 import { motion } from "framer-motion";
 import DragHint from "./extras/DragHint";
+import SetColumn from "./extras/SetColumn";
 
 const COLUMNS = [
   { id: "all", title: "All" },
@@ -139,7 +140,7 @@ const TaskList = () => {
       <div className="w-full flex gap-2 md:gap-4">
         <DndContext onDragEnd={handleDragEnd}>
           {COLUMNS.filter((col) => col.id !== "all").map((column) => (
-            <Column
+            <SetColumn
               key={column.id}
               column={column}
               tasks={filteredTasks.filter((task) => task.status === column.id)}
