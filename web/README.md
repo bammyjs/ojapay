@@ -5,7 +5,7 @@ This app allows users to **create, edit, delete, search, and drag tasks** betwee
 
 ## 🚀 Live Demo
 
-🔗 **[Deployed App URL](https://** )
+🔗 **[Deployed App URL](https://ojapay-task-test.netlify.app/)**
 
 ## 📌 Features
 
@@ -22,8 +22,8 @@ This app allows users to **create, edit, delete, search, and drag tasks** betwee
 ### **1️⃣ Clone the Repository**
 
 ```bash
-git clone https://github.com/your-username/task-manager.git
-cd task-manager
+git clone https://github.com/bammyjs/ojapay.git
+cd web
 ```
 
 ### **2️⃣ Install Dependencies**

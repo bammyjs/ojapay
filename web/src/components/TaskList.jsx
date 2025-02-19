@@ -2,7 +2,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { setTasks, setSearchQuery, setFilter } from "../redux/taskSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosInformationCircle, IoMdAddCircle } from "react-icons/io";
-import { DndContext } from "@dnd-kit/core";
+import {
+  DndContext,
+  TouchSensor,
+  MouseSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 
 import PropTypes from "prop-types";
 import { useState } from "react";
@@ -23,6 +29,17 @@ const TaskList = () => {
   const { tasks, filter, searchQuery } = useSelector((state) => state.tasks);
   const [selectedTask, setSelectedTask] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Drag-and-Drop Sensors for Mouse & Touch
+  const sensors = useSensors(
+    useSensor(MouseSensor),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 200,
+        tolerance: 5,
+      },
+    })
+  );
 
   // Handle Drag & Drop
   const handleDragEnd = (event) => {
@@ -47,20 +64,7 @@ const TaskList = () => {
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   };
 
-  // Handle task completion toggle
-  const handleToggleComplete = (taskId) => {
-    const updatedTasks = tasks.map((task) =>
-      task.id === taskId
-        ? {
-            ...task,
-            status: task.status === "completed" ? "active" : "completed",
-          }
-        : task
-    );
 
-    dispatch(setTasks(updatedTasks));
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
-  };
 
   // Handle Task Selection for Modal (View/Edit)
   const handleSelectTask = (task) => {
@@ -137,40 +141,39 @@ const TaskList = () => {
       />
 
       {/* Drag-and-Drop Context */}
-      <div className="w-full flex gap-2 md:gap-4">
-        <DndContext onDragEnd={handleDragEnd}>
+      <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+        <div className="w-full flex gap-2 md:gap-4">
           {COLUMNS.filter((col) => col.id !== "all").map((column) => (
             <SetColumn
               key={column.id}
               column={column}
               tasks={filteredTasks.filter((task) => task.status === column.id)}
               onSelectTask={handleSelectTask}
-              onToggleComplete={handleToggleComplete}
               onDeleteTask={handleDeleteTask}
             />
           ))}
-        </DndContext>
-      </div>
+        </div>
 
-      {/* Floating Add Task Button */}
-      <motion.span
-        onClick={() => navigate("/create-task")}
-        className="fixed bottom-10 right-10 bg-purple-600 flex gap-2 p-3 rounded-full shadow-lg cursor-pointer"
-        whileHover={{ scale: 1.1 }}
-        animate={{ y: [0, -5, 0] }}
-        transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-      >
-        <IoMdAddCircle size={30} className="text-white" />
-      </motion.span>
+        {/* Floating Add Task Button */}
+        <motion.span
+          onClick={() => navigate("/create-task")}
+          className="fixed bottom-10 right-10 bg-purple-600 flex gap-2 p-3 rounded-full shadow-lg cursor-pointer"
+          whileHover={{ scale: 1.1 }}
+          animate={{ y: [0, -5, 0] }}
+          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+        >
+          <IoMdAddCircle size={30} className="text-white" />
+        </motion.span>
 
-      {/* Task Modal for Editing/Viewing */}
-      <TaskModal
-        isOpen={isModalOpen}
-        task={selectedTask}
-        isEditMode={true}
-        onClose={() => setIsModalOpen(false)}
-        onSave={handleSaveTask}
-      />
+        {/* Task Modal for Editing/Viewing */}
+        <TaskModal
+          isOpen={isModalOpen}
+          task={selectedTask}
+          isEditMode={true}
+          onClose={() => setIsModalOpen(false)}
+          onSave={handleSaveTask}
+        />
+      </DndContext>
     </div>
   );
 };
