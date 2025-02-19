@@ -29,8 +29,3 @@ describe("App Layout", () => {
 });
 
 
-
-
-
-
- "test": "jest --watchAll --transformIgnorePatterns \"node_modules/(?!(react-native|@react-native|react-native-reanimated|react-navigation|@react-navigation|react-native-gesture-handler|react-redux)/)"

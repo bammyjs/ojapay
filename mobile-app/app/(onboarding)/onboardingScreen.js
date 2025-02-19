@@ -23,17 +23,17 @@ const OnboardingScreen = () => {
     {
       image: require("../../assets/images/screen3.jpg"),
       title: "Welcome",
-      subtitle: "Discover the best products @Offaxe Store!",
+      subtitle: "Task Pre-planned",
     },
     {
       image: require("../../assets/images/screen4.jpg"),
       title: "Save Money",
-      subtitle: "Get the best deals!",
+      subtitle: "Track your Progress",
     },
     {
       image: require("../../assets/images/screen5.jpg"),
       title: "Shop Smart",
-      subtitle: "Enjoy the best shopping experience!",
+      subtitle: "Stay on top of your Budget",
     },
   ];
   const handleNext = async () => {

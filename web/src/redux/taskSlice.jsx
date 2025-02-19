@@ -17,6 +17,9 @@ const taskSlice = createSlice({
       localStorage.setItem("tasks", JSON.stringify(state.tasks));
       toast.success(`New task (${action.payload.title}) Added `);
     },
+    setTasks: (state, action) => {
+      state.tasks = action.payload;
+    },
     updateTask: (state, action) => {
       const index = state.tasks.findIndex(
         (task) => task.id === action.payload.id
@@ -52,6 +55,7 @@ const taskSlice = createSlice({
 
 export const {
   addTask,
+  setTasks,
   updateTask,
   setFilter,
   setSearchQuery,

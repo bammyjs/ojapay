@@ -1,71 +1,82 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useDrag, useDrop } from "react-dnd";
-import PropTypes from "prop-types";
-import { setError, setFilter, setSearchQuery } from "../redux/taskSlice";
-import { useEffect, useState } from "react";
-import SkeletonLoading from "./extras/SkeletonLoading";
+import { setTasks, setSearchQuery, setFilter } from "../redux/taskSlice";
 import { Link, useNavigate } from "react-router-dom";
-import { IoIosInformationCircle, IoMdAdd } from "react-icons/io";
+import { IoIosInformationCircle, IoMdAddCircle } from "react-icons/io";
+import { DndContext } from "@dnd-kit/core";
+import Column from "./column";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import TaskModal from "./TaskModal";
 
-const TaskItem = ({ task, index, moveTask, onSelectTask }) => {
-  // TODO: drag and drop not working yet fix this later.
+const COLUMNS = [
+  { id: "all", title: "All" },
+  { id: "active", title: "Active" },
+  { id: "completed", title: "Completed" },
+];
 
-  const [, ref] = useDrag({
-    type: "TASK",
-    item: { index },
-  });
-
-  const [, drop] = useDrop({
-    accept: "TASK",
-    hover: (draggedItem) => {
-      if (draggedItem.index !== index) {
-        moveTask(draggedItem.index, index);
-        draggedItem.index = index;
-      }
-    },
-  });
-
-  return (
-    <div
-      ref={(node) => ref(drop(node))}
-      className={`w-full p-4 border mb-2 bg-gray-400 rounded cursor-move `}
-      onClick={() => onSelectTask(task)}
-      style={{ touchAction: "none" }}
-    >
-      <h3 className="text-lg font-bold text-gray-600">{task.title}</h3>
-      <p className="text-gray-600">{task.description}</p>
-      <p className="text-sm text-gray-600">
-        Due: {task.dueDate} | Priority: {task.priority}
-      </p>
-      <p
-        className={`text-sm ${
-          task.status === "completed" ? "text-green-600" : "text-yellow-600"
-        }`}
-      >
-        {task.status}
-      </p>
-    </div>
-  );
-};
-
-TaskItem.propTypes = {
-  task: PropTypes.object.isRequired,
-  index: PropTypes.number.isRequired,
-  moveTask: PropTypes.func.isRequired,
-  onSelectTask: PropTypes.func.isRequired,
-};
-
-const TaskList = ({ onSelectTask }) => {
+const TaskList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { tasks, filter, searchQuery } = useSelector((state) => state.tasks);
-  const [loading, setLoading] = useState(true);
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1000);
-    return () => clearTimeout(timer);
-  }, []);
+  // Handle Drag & Drop
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+    if (!over) return;
 
+    const taskId = active.id;
+    const newStatus = over.id; // Column ID ("active" or "completed")
+
+    const updatedTasks = tasks.map((task) =>
+      task.id === taskId ? { ...task, status: newStatus } : task
+    );
+
+    dispatch(setTasks(updatedTasks));
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+  };
+
+  // Handle task deletion
+  const handleDeleteTask = (taskId) => {
+    const updatedTasks = tasks.filter((task) => task.id !== taskId);
+    dispatch(setTasks(updatedTasks));
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+  };
+
+  // Handle task completion toggle
+  const handleToggleComplete = (taskId) => {
+    const updatedTasks = tasks.map((task) =>
+      task.id === taskId
+        ? {
+            ...task,
+            status: task.status === "completed" ? "active" : "completed",
+          }
+        : task
+    );
+
+    dispatch(setTasks(updatedTasks));
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+  };
+
+  // Handle Task Selection for Modal (View/Edit)
+  const handleSelectTask = (task) => {
+    setSelectedTask(task);
+    setIsModalOpen(true);
+  };
+
+  // Handle Saving Edited Task
+  const handleSaveTask = (id, updatedTask) => {
+    const updatedTasks = tasks.map((task) =>
+      task.id === id ? { ...task, ...updatedTask } : task
+    );
+
+    dispatch(setTasks(updatedTasks));
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    setIsModalOpen(false);
+  };
+
+  // Filter tasks based on search and selected tab
   const filteredTasks = tasks.filter((task) => {
     const matchesFilter = filter === "all" || task.status === filter;
     const matchesSearch = task.title
@@ -73,23 +84,6 @@ const TaskList = ({ onSelectTask }) => {
       .includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
-
-  const moveTask = (fromIndex, toIndex) => {
-    const updatedTasks = [...tasks];
-    const [movedTask] = updatedTasks.splice(fromIndex, 1);
-    updatedTasks.splice(toIndex, 0, movedTask);
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
-  };
-
- 
-
-  // if (setError) {
-  //   return (
-  //     <div className="flex-1 justify-center items-center">
-  //       <p className="text-red-600 text-xl">can not fetch data</p>
-  //     </div>
-  //   );
-  // }
 
   if (tasks.length === 0) {
     return (
@@ -102,7 +96,7 @@ const TaskList = ({ onSelectTask }) => {
         </p>
         <Link
           to={"/create-task"}
-          className="py-3 flex items-center justify-center text-white  bg-black px-4 rounded-xl"
+          className="py-3 flex items-center justify-center text-white bg-black px-4 rounded-xl"
         >
           <p className="text-white">Create new Task</p>
         </Link>
@@ -112,38 +106,24 @@ const TaskList = ({ onSelectTask }) => {
 
   return (
     <div className="container max-w-7xl bg-blue">
-      <div className="mb-4  flex gap-2 justify-center items-center">
-        <button
-          onClick={() => dispatch(setFilter("all"))}
-          className={
-            filter === "all"
-              ? "!bg-gray-600 text-white p-2 rounded"
-              : "p-2 border rounded "
-          }
-        >
-          All
-        </button>
-        <button
-          onClick={() => dispatch(setFilter("active"))}
-          className={
-            filter === "active"
-              ? "!bg-gray-600 text-white p-2 rounded"
-              : "p-2 border rounded"
-          }
-        >
-          Active
-        </button>
-        <button
-          onClick={() => dispatch(setFilter("completed"))}
-          className={
-            filter === "completed"
-              ? "!bg-gray-600 text-white p-2 rounded"
-              : "p-2 border rounded"
-          }
-        >
-          Completed
-        </button>
+      {/* Filter Tabs */}
+      <div className="mb-4 flex gap-2 justify-center items-center">
+        {COLUMNS.map((column) => (
+          <button
+            key={column.id}
+            onClick={() => dispatch(setFilter(column.id))}
+            className={
+              filter === column.id
+                ? "!bg-gray-600 text-white p-2 rounded"
+                : "p-2 border rounded"
+            }
+          >
+            {column.title}
+          </button>
+        ))}
       </div>
+
+      {/* Search Input */}
       <input
         type="text"
         placeholder="Search tasks..."
@@ -151,40 +131,50 @@ const TaskList = ({ onSelectTask }) => {
         onChange={(e) => dispatch(setSearchQuery(e.target.value))}
         className="w-full p-2 mb-4 border border-gray-600 rounded text-gray-600"
       />
-      <div className="w-full  mt-4">
-        {loading ? (
-          <div className="grid pb-8 justify-between overflow-auto  grid-cols-1 gap-2 md:gap-4 md:grid-cols-3 lg:grid-cols-3 ">
-            <SkeletonLoading cards={8} />
-          </div>
-        ) : (
-          <>
-            <div className="grid pb-8 justify-between overflow-auto  grid-cols-1 gap-2 md:gap-4 md:grid-cols-3 lg:grid-cols-3 ">
-              {filteredTasks.map((task, index) => (
-                <TaskItem
-                  key={task.id}
-                  task={task}
-                  index={index}
-                  moveTask={moveTask}
-                  onSelectTask={onSelectTask}
-                />
-              ))}
-            </div>
-          </>
-        )}
+
+      {/* Drag-and-Drop Context */}
+      <div className="w-full flex gap-2 md:gap-4">
+        <DndContext onDragEnd={handleDragEnd}>
+          {COLUMNS.filter((col) => col.id !== "all").map((column) => (
+            <Column
+              key={column.id}
+              column={column}
+              tasks={filteredTasks.filter((task) => task.status === column.id)}
+              onSelectTask={handleSelectTask}
+              onToggleComplete={handleToggleComplete}
+              onDeleteTask={handleDeleteTask}
+            />
+          ))}
+        </DndContext>
       </div>
+
+      {/* Floating Add Task Button */}
       <span
         onClick={() => navigate("/create-task")}
         className="bg-purple-600 flex gap-2 animate-pulse p-2 rounded items-center absolute bottom-20 right-10 md:right-[15%]"
       >
         Create a new task
-        <IoMdAdd size={25} />
+        <IoMdAddCircle size={25} />
       </span>
+
+      {/* Task Modal for Editing/Viewing */}
+      <TaskModal
+        isOpen={isModalOpen}
+        task={selectedTask}
+        isEditMode={true}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleSaveTask}
+      />
     </div>
   );
 };
 
 TaskList.propTypes = {
-  onSelectTask: PropTypes.func.isRequired,
+  onSelectTask: PropTypes.func,
+  loading: PropTypes.bool,
+  tasks: PropTypes.arrayOf(PropTypes.object),
+  filter: PropTypes.string,
+  searchQuery: PropTypes.string,
 };
 
 export default TaskList;

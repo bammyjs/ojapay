@@ -16,11 +16,11 @@ import CreateNewTask from "./pages/CreateNewTask";
 import ListTaskItems from "./pages/ListTaskItems";
 import { ToastContainer } from "react-toastify";
 import { useEffect } from "react";
+import ThemeToggle from "./components/extras/ToggleTheme";
 
 function App() {
   const dispatch = useDispatch();
   const { theme } = useSelector((state) => state.tasks);
-  // const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -36,14 +36,9 @@ function App() {
     }
   }, [dispatch, theme]);
 
-  const handleThemeToggle = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    localStorage.setItem("theme", newTheme);
-    dispatch(toggleTheme());
-    document.documentElement.classList.toggle("dark");
-  };
-
   return (
+    //TODO: Work on toggle theme to have full control on color scheme>
+
     <DndProvider
       backend={TouchBackend}
       options={{ enableMouseEvents: true, enableTouchEvents: true }}
@@ -51,24 +46,23 @@ function App() {
       <ToastContainer />
       <Router>
         <div
-          className={`min-h-screen p-4 ${
+          className={`relative w-full items-center flex flex-col  min-h-screen px-4 ${
             theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-100"
           }`}
         >
-          <div className="w-full h-20  px-2 items-center bg-white mb-4 flex justify-between ">
-            <h2 className="text-3xl md:text-4xl text-gray-600 font-bold ">
+          <div className="fixed container max-w-7xl md:mt-4  md:rounded-3xl w-full bg-white shadow-md z-50 px-2 flex items-center justify-between h-20">
+            <h2 className="text-3xl md:text-4xl text-gray-600 font-bold">
               Task Manager
             </h2>
-            <button onClick={handleThemeToggle} className="p-2 border rounded">
-              Toggle Theme
-            </button>
+            <ThemeToggle />
           </div>
-
-          <Routes>
-            <Route path="/" element={<ListTaskItems />} />
-            <Route path="/create-task" element={<CreateNewTask />} />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
+          <div className="mt-24 w-full container max-w-7xl">
+            <Routes>
+              <Route path="/" element={<ListTaskItems />} />
+              <Route path="/create-task" element={<CreateNewTask />} />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </div>
         </div>
       </Router>
     </DndProvider>
