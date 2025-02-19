@@ -53,7 +53,7 @@ const TaskForm = ({ onAddTask }) => {
   };
 
   return (
-    <div className=" w-full p-4 text-black text-left rounded bg-gray-300">
+    <div className=" w-full  text-black text-left rounded bg-gray-300">
       <form
         onSubmit={handleSubmit}
         className="border border-black p-4 rounded mb-4 "
@@ -61,6 +61,38 @@ const TaskForm = ({ onAddTask }) => {
         <h3 className="text-3xl font-bold mb-4 text-center ">
           Create New Task
         </h3>
+        <label htmlFor="dueDate" className="block mb-1 text-sm font-medium">
+          Due Date
+        </label>
+        <input
+          type="text"
+          readOnly
+          value={selectedDate ? format(selectedDate, "yyyy-MM-dd") : ""}
+          onClick={() =>
+            document
+              .getElementById("daypicker-modal")
+              .classList.toggle("hidden")
+          }
+          placeholder="Select Due Date"
+          className="hidden md:block w-full p-2 mb-2 border rounded cursor-pointer "
+        />
+
+        {/* DayPicker Modal */}
+        <div
+          id="daypicker-modal"
+          className=" mb-2 md:absolute z-50 bg-gray-400 p-4 border shadow-lg rounded"
+        >
+          <DayPicker
+            mode="single"
+            selected={selectedDate}
+            onSelect={handleDateChange}
+            footer={
+              selectedDate
+                ? `Due Date: ${selectedDate.toLocaleDateString()}`
+                : "Pick a day."
+            }
+          />
+        </div>
         <InputField
           name={"title"}
           labelTitle={"Title"}
@@ -81,38 +113,6 @@ const TaskForm = ({ onAddTask }) => {
           className="w-full p-2  border rounded"
         />
 
-        <label htmlFor="dueDate" className="block mb-1 text-sm font-medium">
-          Due Date
-        </label>
-        <input
-          type="text"
-          readOnly
-          value={selectedDate ? format(selectedDate, "yyyy-MM-dd") : ""}
-          onClick={() =>
-            document
-              .getElementById("daypicker-modal")
-              .classList.toggle("hidden")
-          }
-          placeholder="Select Due Date"
-          className="hidden md:block w-full p-2 mb-2 border rounded cursor-pointer "
-        />
-
-        {/* DayPicker Modal */}
-        <div
-          id="daypicker-modal"
-          className="  md:absolute z-50 bg-gray-400 p-4 border shadow-lg rounded"
-        >
-          <DayPicker
-            mode="single"
-            selected={selectedDate}
-            onSelect={handleDateChange}
-            footer={
-              selectedDate
-                ? `Due Date: ${selectedDate.toLocaleDateString()}`
-                : "Pick a day."
-            }
-          />
-        </div>
         <label htmlFor="priority" className="block mb-1 text-sm font-medium">
           Select Priority
         </label>
