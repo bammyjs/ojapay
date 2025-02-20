@@ -19,6 +19,7 @@ const taskSlice = createSlice({
     },
     setTasks: (state, action) => {
       state.tasks = action.payload;
+      toast.success(` Status has been updated `);
     },
     updateTask: (state, action) => {
       const index = state.tasks.findIndex(

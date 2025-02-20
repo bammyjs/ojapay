@@ -56,7 +56,7 @@ const TaskItem = ({ task, onDeleteTask, onEditTask }) => {
         </motion.div>
 
         {/* Menu */}
-        <div className="w-16 flex flex-col items-center space-y-2  bg-gray-800 text-white rounded-md shadow-md py-2 md:p-2 z-10">
+        <div className="w-16 h-fit flex flex-col items-center space-y-2  bg-gray-800 text-white rounded-md shadow-md py-2 md:p-2 z-10">
           {/* Edit Task */}
           <button
             className="w-10 flex flex-col items-center  p-2 hover:bg-gray-600"

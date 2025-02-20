@@ -157,7 +157,7 @@ const TaskList = () => {
         {/* Floating Add Task Button */}
         <motion.span
           onClick={() => navigate("/create-task")}
-          className="fixed bottom-10 right-10 bg-purple-600 flex gap-2 p-3 rounded-full shadow-lg cursor-pointer"
+          className="fixed bottom-10 right-10 bg-purple-600 flex gap-2 p-3 rounded-full shadow-lg cursor-pointer z-50"
           whileHover={{ scale: 1.1 }}
           animate={{ y: [0, -5, 0] }}
           transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}

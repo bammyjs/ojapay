@@ -11,7 +11,10 @@ const InputField = ({
 }) => {
   return (
     <div>
-      <label htmlFor={name} className="block text-white mb-1 text-sm font-medium">
+      <label
+        htmlFor={name}
+        className="block text-white mb-1 text-sm font-medium"
+      >
         {labelTitle}
       </label>
       <input

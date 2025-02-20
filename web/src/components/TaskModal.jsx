@@ -61,7 +61,6 @@ const TaskModal = ({ isOpen, task, isEditMode, onClose }) => {
   const handleSave = () => {
     if (!formData.title.trim()) return;
 
-    // Dispatch updateTask action to Redux
     dispatch(updateTask({ id: task.id, updatedTask: formData }));
 
     onClose(); // Close modal after saving
@@ -85,32 +84,37 @@ const TaskModal = ({ isOpen, task, isEditMode, onClose }) => {
         <label className="block mb-2 text-sm font-medium">Title</label>
         <input
           type="text"
-          className={`capitalize ${
-            isEditMode
-              ? "w-full p-2 border rounded"
-              : "w-full p-2 border border-gray-600 rounded bg-gray-800 "
-          }`}
           value={formData.title || ""}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           disabled={!isEditMode}
+          className={`capitalize ${
+            isEditMode ? "w-full p-2 border rounded" : "w-full font-bold"
+          }`}
         />
 
         {/* Task Description */}
         <label className="block mt-3 mb-2 text-sm font-medium">
           Description
         </label>
-        <textarea
-          className={`capitalize ${
-            isEditMode
-              ? "w-full p-2 border rounded"
-              : "w-full p-2 border border-gray-600 rounded bg-gray-800 "
-          }`}
-          value={formData.description || ""}
-          onChange={(e) =>
-            setFormData({ ...formData, description: e.target.value })
-          }
-          disabled={!isEditMode}
-        />
+        {isEditMode ? (
+          <textarea
+            value={formData.description || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
+            disabled={!isEditMode}
+            className="w-full p-2 border rounded"
+          />
+        ) : (
+          <input
+            value={formData.description || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
+            disabled={!isEditMode}
+            className="w-full font-bold"
+          />
+        )}
 
         {/* Task Due Date */}
         <label className="block mt-3 mb-2 text-sm font-medium">Due Date</label>
@@ -127,7 +131,7 @@ const TaskModal = ({ isOpen, task, isEditMode, onClose }) => {
           className={`capitalize ${
             isEditMode
               ? "w-full cursor-pointer p-2 border rounded"
-              : "w-full p-2 border border-gray-600 rounded bg-gray-800 "
+              : "w-full font-bold"
           }`}
         />
 
@@ -162,17 +166,23 @@ const TaskModal = ({ isOpen, task, isEditMode, onClose }) => {
             ))}
           </div>
         ) : (
-          <p className="capitalize text-sm text-gray-300 mb-4">
+          <p className="capitalize font-bold text-gray-300 mb-4">
             {formData.priority}
           </p>
         )}
-        <label className="block mt-3 mb-2 text-sm font-medium">Status</label>
+        <label
+          className={`${
+            isEditMode ? "hidden" : "block mt-3 mb-2 text-sm font-medium"
+          }`}
+        >
+          Status
+        </label>
         <input
           type="text"
           className={`capitalize ${
             isEditMode
-              ? "w-full p-2 border rounded"
-              : "w-full p-2 border border-gray-600 rounded bg-gray-800 "
+              ? "hidden w-full p-2 border rounded"
+              : "w-full font-bold  "
           }`}
           value={formData.status || ""}
           onChange={(e) => setFormData({ ...formData, status: e.target.value })}

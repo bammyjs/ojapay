@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import App from "../web/src/App";
+import App from "../../web/src/App";
 
 test("renders Task Manager heading", () => {
   render(<App />);
