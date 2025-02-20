@@ -5,11 +5,14 @@ import { IoMdTrash, IoMdCreate, IoMdEye, IoMdCalendar } from "react-icons/io";
 import { useState } from "react";
 import TaskModal from "./TaskModal";
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 
 const TaskItem = ({ task, onDeleteTask, onEditTask }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+
+  const { theme } = useSelector((state) => state.tasks);
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: task.id,
@@ -22,7 +25,7 @@ const TaskItem = ({ task, onDeleteTask, onEditTask }) => {
   return (
     <>
       {/* Main Task Card */}
-      <div className="w-full flex p-2 justify-between rounded-lg bg-gray-700 shadow-sm hover:shadow-md">
+      <div className="w-full flex flex-col md:flex-row p-2 justify-between rounded-lg bg-gray-700 shadow-sm hover:shadow-md gap-2">
         {/* Draggable Section */}
         <motion.div
           whileHover={{
@@ -33,7 +36,11 @@ const TaskItem = ({ task, onDeleteTask, onEditTask }) => {
           ref={setNodeRef}
           {...listeners}
           {...attributes}
-          className="w-[80%] cursor-grab space-y-2 bg-gray-700 rounded-lg p-2 md:p-4"
+          className={`${
+            theme === "dark"
+              ? "bg-gray-900 text-gray-300  "
+              : "bg-gray-400 text-gray-900"
+          } md:w-[90%] cursor-grab space-y-2  rounded-lg p-2 md:p-4`}
           style={style}
           onClick={() => {
             setEditMode(false); // Open in preview mode
@@ -41,22 +48,20 @@ const TaskItem = ({ task, onDeleteTask, onEditTask }) => {
             setModalOpen(true);
           }}
         >
-          <h3 className="capitalize text-base md:text-xl font-medium text-white">
+          <h3 className="capitalize text-base md:text-xl font-bold ">
             {shortenText(task.title, 20)}
           </h3>
-          <p className="capitalize text-sm text-gray-300">
-            {shortenText(task.description, 10)}
+          <p className="capitalize text-s">
+            {shortenText(task.description, 15)}
           </p>
-          <p className="flex items-center gap-1 text-sm text-orange-400">
+          <p className="flex items-center gap-1 text-sm text-orange-700">
             <IoMdCalendar /> {shortenText(task.dueDate, 20)}
           </p>
-          <p className="capitalize text-sm text-gray-300">
-            Status: {task.status}
-          </p>
+          <p className="capitalize text-base font-bold ">Status: {task.status}</p>
         </motion.div>
 
         {/* Menu */}
-        <div className="w-16 h-fit flex flex-col items-center space-y-2  bg-gray-800 text-white rounded-md shadow-md py-2 md:p-2 z-10">
+        <div className="w-full md:w-fit space-x-2 md:space-x-0 h-fit flex flex-row justify-between md:flex-col items-center md:space-y-2  bg-gray-800 text-white rounded-md shadow-md p-2 z-10">
           {/* Edit Task */}
           <button
             className="w-10 flex flex-col items-center  p-2 hover:bg-gray-600"

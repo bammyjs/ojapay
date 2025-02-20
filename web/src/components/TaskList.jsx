@@ -64,8 +64,6 @@ const TaskList = () => {
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   };
 
-
-
   // Handle Task Selection for Modal (View/Edit)
   const handleSelectTask = (task) => {
     setSelectedTask(task);
@@ -122,8 +120,8 @@ const TaskList = () => {
             onClick={() => dispatch(setFilter(column.id))}
             className={
               filter === column.id
-                ? "!bg-gray-600 text-white p-2 rounded"
-                : "p-2 border rounded"
+                ? "!bg-gray-700 text-white"
+                : "!bg-gray-300 text-gray-700"
             }
           >
             {column.title}

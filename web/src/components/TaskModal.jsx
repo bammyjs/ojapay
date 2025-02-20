@@ -128,17 +128,17 @@ const TaskModal = ({ isOpen, task, isEditMode, onClose }) => {
               .getElementById("daypicker-modal-edit")
               .classList.toggle("hidden")
           }
-          className={`capitalize ${
+          className={`  ${
             isEditMode
               ? "w-full cursor-pointer p-2 border rounded"
               : "w-full font-bold"
-          }`}
+          }capitalize`}
         />
 
         <div
           ref={datePickerRef}
           id="daypicker-modal-edit"
-          className="hidden absolute z-50 bg-gray-400 p-4 border shadow-lg rounded"
+          className="hidden max-w-sm absolute  z-50 bg-gray-900 p-4 border shadow-lg rounded-2xl"
         >
           <DayPicker
             mode="single"
