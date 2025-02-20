@@ -5,7 +5,7 @@ export const LoadingButton = ({ isLoading, children, onClick }) => {
     <button
       onClick={onClick}
       disabled={isLoading}
-      className=" !bg-gray-900 items-center text-white w-full hover:btn-accent "
+      className=" !bg-gray-700 items-center text-white w-full hover:btn-accent "
       style={{ position: "relative" }}
     >
       {isLoading ? (

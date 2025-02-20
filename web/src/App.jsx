@@ -14,6 +14,7 @@ import Header from "./components/Header";
 
 function App() {
   const dispatch = useDispatch();
+
   const { theme } = useSelector((state) => state.tasks);
 
   useEffect(() => {

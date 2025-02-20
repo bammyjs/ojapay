@@ -6,7 +6,7 @@ const CreateNewTask = () => {
   const dispatch = useDispatch();
 
   return (
-    <section className=" w-full pb-10 justify-center items-center flex flex-col gap-6">
+    <section className=" w-full pb-10 md:mt-10 justify-center items-center flex flex-col gap-6">
       <h3 className="text-3xl text-gray-500 font-bold text-center ">
         Create New Task
       </h3>

@@ -7,10 +7,11 @@ import { IoIosArrowBack } from "react-icons/io";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import format from "date-fns/format";
+import { useSelector } from "react-redux";
 
 const TaskForm = ({ onAddTask }) => {
   const navigate = useNavigate();
-
+  const { theme } = useSelector((state) => state.tasks);
   const [task, setTask] = useState({
     title: "",
     description: "",
@@ -53,8 +54,11 @@ const TaskForm = ({ onAddTask }) => {
   };
 
   return (
-    <div className=" w-full  text-black text-left rounded-2xl bg-gray-800">
-      <form onSubmit={handleSubmit} className=" border-black p-4 rounded mb-4 space-y-2 ">
+    <div className=" w-full  max-w-sm text-black text-left  bg-transparent">
+      <form
+        onSubmit={handleSubmit}
+        className="border-2 border-gray-300 p-4 rounded-2xl mb-4 space-y-2 "
+      >
         {/* <label
           htmlFor="dueDate"
           className="block text-white mb-1 text-sm font-medium"
@@ -71,13 +75,15 @@ const TaskForm = ({ onAddTask }) => {
               .classList.toggle("hidden")
           }
           placeholder="Select Due Date"
-          className="hidden md:block w-full p-2 mb-2 border rounded cursor-pointer "
+          className="hidden w-full p-2 mb-2 border rounded cursor-pointer "
         />
 
         {/* DayPicker Modal */}
         <div
           id="daypicker-modal"
-          className="text-white mb-2 md:absolute z-50 bg-gray-900 p-4 border border-gray-300 shadow-lg flex items-center justify-center rounded-2xl"
+          className={`${
+            theme === "dark" ? "text-white  bg-gray-900  rounded-2xl " : "text-gray-700 rounded-2xl"
+          } "mb-2 shadow-lg p-4 border border-gray-300 flex items-center justify-center rounded-2xl"`}
         >
           <DayPicker
             mode="single"
@@ -100,7 +106,7 @@ const TaskForm = ({ onAddTask }) => {
 
         <label
           htmlFor="description"
-          className="block text-white mb-1 text-sm font-medium"
+          className="block text-gray-500 mb-1 text-sm font-medium"
         >
           Description
         </label>
@@ -110,12 +116,12 @@ const TaskForm = ({ onAddTask }) => {
           value={task.description}
           onChange={handleChange}
           placeholder="Task Description"
-          className="w-full p-2 text-white border border-gray-300 rounded"
+          className="w-full p-2 text-gray-500 border  border-gray-300 rounded"
         />
 
         <label
           htmlFor="priority"
-          className="block text-white mb-1 text-sm font-medium"
+          className="block text-gray-500 mb-1 text-sm font-medium"
         >
           Select Priority
         </label>
@@ -127,7 +133,7 @@ const TaskForm = ({ onAddTask }) => {
               onClick={() => handlePriorityChange(level)}
               className={`py-2 px-4 w-32 rounded ${
                 task.priority === level
-                  ? "!bg-gray-900 text-white"
+                  ? "!bg-gray-700 text-white"
                   : "!bg-gray-300 text-gray-500"
               }`}
             >

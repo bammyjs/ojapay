@@ -13,7 +13,7 @@ const InputField = ({
     <div>
       <label
         htmlFor={name}
-        className="block text-white mb-1 text-sm font-medium"
+        className="block text-gray-500 mb-1 text-sm font-medium"
       >
         {labelTitle}
       </label>
@@ -24,7 +24,7 @@ const InputField = ({
         value={value}
         onChange={handleChange}
         placeholder={placeholder}
-        className={`${otherStyles} text-white w-full p-2 mb-2 border border-gray-300 rounded`}
+        className={`${otherStyles} text-gray-500 w-full p-2 mb-2 border border-gray-300 rounded`}
       />
     </div>
   );
