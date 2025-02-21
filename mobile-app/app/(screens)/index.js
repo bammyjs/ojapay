@@ -28,6 +28,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import * as Progress from "react-native-progress";
 import "react-native-polyfill-globals/auto";
+import ThemeToggleButton from "../../components/ThemeToggleButton";
 
 const TaskList = () => {
   const dispatch = useDispatch();
@@ -150,9 +151,16 @@ const TaskList = () => {
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <View className="w-full p-5 h-full bg-typography-black">
+      <View className="w-full p-5 h-full dark:bg-backgroundDark ">
         <Stack.Screen options={{ headerShown: false }} />
         <SafeAreaView className="relative h-full w-full top-0 flex items-start mt-4">
+          {/* Header */}
+          <View className="w-full mb-6 flex flex-row items-center justify-between">
+            <Text className="text-3xl  text-primary-50 font-Inter_600SemiBold ">
+              Welcome
+            </Text>
+            <ThemeToggleButton />
+          </View>
           <View className="w-full flex flex-row items-center justify-between my-4">
             <Text className="text-4xl max-w-[280] text-primary-50 font-Inter_700Bold">
               You have {todaysTasks.length} tasks today

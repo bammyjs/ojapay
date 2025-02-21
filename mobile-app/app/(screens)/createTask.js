@@ -18,6 +18,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import IconButton from "../../components/IconButton";
 import { StatusBar } from "expo-status-bar";
 import DateTimePicker from "react-native-ui-datepicker";
+import ThemeToggleButton from "../../components/ThemeToggleButton";
 
 const PRIORITY_OPTIONS = [
   { label: "High", color: "bg-red-600" },
@@ -113,7 +114,7 @@ const TaskForm = () => {
         <Stack.Screen options={{ headerShown: false }} />
         <SafeAreaView className="w-full top-0 flex justify-center items-center mt-4">
           {/* Header */}
-          <View className="w-full mb-6 flex flex-row items-center">
+          <View className="w-full mb-6 flex flex-row items-center justify-between">
             <IconButton
               handlePress={() => router.back()}
               name="arrow-back-circle-outline"
@@ -121,9 +122,10 @@ const TaskForm = () => {
               containerStyles="items-center rounded"
               textStyles="text-typography-700"
             />
-            <Text className="w-full text-3xl  text-primary-50 font-Inter_600SemiBold ml-4">
+            <Text className="text-3xl  text-primary-50 font-Inter_600SemiBold ml-4">
               Create a New Task
             </Text>
+            <ThemeToggleButton />
           </View>
 
           {/* Date Picker */}

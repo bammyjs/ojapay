@@ -1,15 +1,15 @@
+import "react-native-reanimated";
 import "../global.css";
+
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { SplashScreen, Stack } from "expo-router";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleTheme } from "../redux/taskSlice";
 import { Provider } from "react-redux";
-import { Text, Pressable } from "react-native";
+import { Text, Pressable, StatusBar, View } from "react-native";
 import Toast from "react-native-toast-message";
 import store from "../redux/store";
-
-SplashScreen.preventAutoHideAsync();
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import {
   useFonts,
@@ -25,7 +25,6 @@ import {
 } from "@expo-google-fonts/inter";
 
 export default function Layout() {
-  // const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     Inter_100Thin,
     Inter_200ExtraLight,
@@ -56,7 +55,6 @@ export default function Layout() {
             name="(screens)/index"
             options={{
               headerTitle: "Task List",
-              // headerRight: () => <ThemeToggleButton />,
             }}
           />
           <Stack.Screen

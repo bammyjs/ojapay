@@ -6,6 +6,10 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     colors: {
+      backgroundLight: "##FFF9F7",
+      backgroundDark: "#1A1C1E",
+      textLight: "#1A1A1A",
+      textDark: "#FFFFFF",
       primary: {
         50: "#FFF9F7",
         100: "#FDE3DD",
@@ -53,7 +57,6 @@ module.exports = {
         error: "rgb(232 70 69)",
       },
       error: platformSelect({
-        // Now you can provide platform specific values
         ios: platformColor("systemRed"),
         android: platformColor("?android:colorError"),
         default: "red",
@@ -72,5 +75,6 @@ module.exports = {
     },
     extend: {},
   },
+  darkMode: "class",
   plugins: [],
 };

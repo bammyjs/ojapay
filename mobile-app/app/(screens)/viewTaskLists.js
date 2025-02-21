@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
-  Animated,
   Easing,
   FlatList,
   Pressable,
@@ -15,14 +14,22 @@ import { useRouter, useLocalSearchParams, Stack } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
 import { Ionicons } from "@expo/vector-icons";
-import { SwipeListView } from "react-native-swipe-list-view";
 import { SafeAreaView } from "react-native-safe-area-context";
-import PrimaryButton from "../../components/primaryButton";
 import { StatusBar } from "expo-status-bar";
 import SearchInput from "../../components/SearchInput";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import IconButton from "../../components/IconButton";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import {
+  GestureHandlerRootView,
+  PanGestureHandler,
+} from "react-native-gesture-handler";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+  withSpring,
+} from "react-native-reanimated";
+import SwipeableTaskItem from "../../components/SwipeableTaskItem";
 
 const ViewTaskLists = () => {
   const dispatch = useDispatch();
@@ -139,29 +146,14 @@ const ViewTaskLists = () => {
 
   // Render task item
   const renderItem = ({ item }) => (
-    <Pressable
-      className="w-full bg-typography-900 mb-3 p-4 rounded-xl"
+    <SwipeableTaskItem
+      item={item}
+      onDelete={deleteTask}
+      onComplete={completeTask}
       onPress={() =>
         router.push({ pathname: "/(screens)/taskDetailScreen", params: item })
       }
-    >
-      <Text className="text-primary-50 font-Inter_600SemiBold text-lg">
-        {item.title ? String(item.title) : "Untitled Task"}
-      </Text>
-      <Text className="text-primary-50 font-Inter_400Regular">
-        {item.description ? String(item.description) : "N/A"}
-      </Text>
-      <Text className="text-primary-300 font-Inter_400Regular">
-        Due: {item.dueDate ? String(item.dueDate) : "N/A"}
-      </Text>
-      <Text
-        className={`text-sm uppercase font-Inter_400Regular ${
-          item.status === "completed" ? "text-grayscale-50" : "text-primary-700"
-        }`}
-      >
-        Status: {item.status ? String(item.status) : "Unknown"}
-      </Text>
-    </Pressable>
+    />
   );
 
   // Render hidden actions (swipeable actions)
@@ -239,15 +231,10 @@ const ViewTaskLists = () => {
               </Text>
             </View>
           ) : (
-            <SwipeListView
+            <FlatList
               data={taskList}
               keyExtractor={(item) => item.id.toString()}
               renderItem={renderItem}
-              renderHiddenItem={renderHiddenItem}
-              leftOpenValue={75}
-              rightOpenValue={-75}
-              stopLeftSwipe={75}
-              stopRightSwipe={-75}
               refreshing={refreshing}
               onRefresh={onRefresh}
             />
