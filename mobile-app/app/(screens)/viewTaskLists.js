@@ -156,42 +156,9 @@ const ViewTaskLists = () => {
     />
   );
 
-  // Render hidden actions (swipeable actions)
-  const renderHiddenItem = (data) => (
-    <View className="flex-row h-full items-center justify-between">
-      {/* Complete button */}
-      <Pressable
-        className=" w-20 items-center justify-between"
-        onPress={() => completeTask(data.item.id)}
-      >
-        <Ionicons
-          name={`${
-            data.item.status === "completed"
-              ? "checkmark-done-circle-sharp"
-              : "checkmark-circle-outline"
-          }`}
-          size={24}
-          color="#fff"
-        />
-        <Text className="text-primary-100 font-Inter_400Regular">{`${
-          data.item.status === "completed" ? "Completed" : "Done ?"
-        }`}</Text>
-      </Pressable>
-
-      {/* Delete button */}
-      <Pressable
-        className=" w-20 b items-center "
-        onPress={() => deleteTask(data.item.id)}
-      >
-        <Ionicons name="trash-bin" size={24} color="red" />
-        <Text className="text-primary-100 font-Inter_400Regular">Delete</Text>
-      </Pressable>
-    </View>
-  );
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <View className="w-full p-5 h-full bg-typography-black">
+      <View className="w-full p-5 h-full bg-backgroundLight dark:bg-backgroundDark">
         <Stack.Screen options={{ headerShown: false }} />
         <SafeAreaView className="flex-1">
           <View className="w-full mb-6 flex flex-row items-center">
@@ -199,10 +166,11 @@ const ViewTaskLists = () => {
               handlePress={() => router.back()}
               name="arrow-back-circle-outline"
               size={40}
+              color={"#F66743"}
               containerStyles="items-center rounded"
               textStyles="text-typography-700"
             />
-            <Text className="w-full text-3xl  text-primary-50 font-Inter_600SemiBold ml-4">
+            <Text className="w-full text-3xl  text-textLight dark:text-textDark font-Inter_600SemiBold ml-4">
               Task List
             </Text>
           </View>
@@ -216,7 +184,7 @@ const ViewTaskLists = () => {
               );
               setTaskList(filteredTasks);
             }}
-            otherStyles="my-4 w-full bg-typography-900 h-14 text-base rounded-xl font-Inter_400Regular"
+            otherStyles="my-4 w-full dark:bg-typography-900 h-14 text-base rounded-xl font-Inter_400Regular"
           />
 
           {taskList.length === 0 ? (
@@ -226,7 +194,7 @@ const ViewTaskLists = () => {
                 size={80}
                 color="gray"
               />
-              <Text className="text-xl text-gray-300 mt-4">
+              <Text className="text-xl text-textLight dark:text-textDark mt-4">
                 No tasks available.
               </Text>
             </View>
@@ -237,16 +205,19 @@ const ViewTaskLists = () => {
               renderItem={renderItem}
               refreshing={refreshing}
               onRefresh={onRefresh}
+              style={{ flex: 1 }}
+              contentContainerStyle={{ paddingBottom: 20 }}
+              showsVerticalScrollIndicator={false}
             />
           )}
           <Pressable
-            className="absolute bottom-16 right-4 bg-blue-500 p-4 rounded-full"
+            className="absolute bottom-16 right-4 bg-primary-500 p-4 rounded-full"
             onPress={() => bottomSheetRef.current?.expand()}
           >
             <Ionicons name="filter" size={30} color="#fff" />
           </Pressable>
           <BottomSheet ref={bottomSheetRef} snapPoints={["3%", "25%"]}>
-            <BottomSheetView className="flex-1   p-4 items-center">
+            <BottomSheetView className="flex-1  p-4  items-center">
               <Text className="text-xl  mb-3 font-Inter_600SemiBold">
                 Filter Tasks
               </Text>
@@ -264,7 +235,7 @@ const ViewTaskLists = () => {
             </BottomSheetView>
           </BottomSheet>
         </SafeAreaView>
-        <StatusBar backgroundColor="transparent" style="light" />
+        <StatusBar backgroundColor="transparent" style="auto" />
       </View>
     </GestureHandlerRootView>
   );
@@ -280,3 +251,36 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+// Render hidden actions (swipeable actions)
+// const renderHiddenItem = (data) => (
+//   <View className="flex-row h-full items-center justify-between">
+//     {/* Complete button */}
+//     <Pressable
+//       className=" w-20 items-center justify-between"
+//       onPress={() => completeTask(data.item.id)}
+//     >
+//       <Ionicons
+//         name={`${
+//           data.item.status === "completed"
+//             ? "checkmark-done-circle-sharp"
+//             : "checkmark-circle-outline"
+//         }`}
+//         size={24}
+//         color="#fff"
+//       />
+//       <Text className="text-primary-100 font-Inter_400Regular">{`${
+//         data.item.status === "completed" ? "Completed" : "Done "
+//       }`}</Text>
+//     </Pressable>
+
+//     {/* Delete button */}
+//     <Pressable
+//       className=" w-20 b items-center "
+//       onPress={() => deleteTask(data.item.id)}
+//     >
+//       <Ionicons name="trash-bin" size={24} color="red" />
+//       <Text className="text-primary-100 font-Inter_400Regular">Delete</Text>
+//     </Pressable>
+//   </View>
+// );

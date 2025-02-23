@@ -41,9 +41,6 @@ const taskSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
-    toggleTheme: (state) => {
-      state.theme = state.theme === "light" ? "dark" : "light";
-    },
   },
 });
 
@@ -55,6 +52,5 @@ export const {
   setSearchQuery,
   setLoading,
   setError,
-  toggleTheme,
 } = taskSlice.actions;
 export default taskSlice.reducer;

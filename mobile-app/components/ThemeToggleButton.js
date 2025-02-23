@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Pressable, Text } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
-import { toggleTheme } from "../redux/taskSlice";
+import { toggleTheme } from "../redux/themeSlice";
 import { useColorScheme } from "nativewind";
 
 const ThemeToggleButton = () => {

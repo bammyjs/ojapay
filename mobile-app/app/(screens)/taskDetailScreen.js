@@ -94,7 +94,7 @@ const TaskDetailScreen = () => {
   };
 
   return (
-    <View className="w-full p-5 h-full bg-typography-black">
+    <View className="w-full p-5 h-full bg-backgroundLight dark:bg-backgroundDark">
       <Stack.Screen options={{ headerShown: false }} />
       <SafeAreaView className="flex-1">
         {/* Header */}
@@ -103,6 +103,7 @@ const TaskDetailScreen = () => {
             handlePress={() => router.back()}
             name="arrow-back-circle-outline"
             size={40}
+            color={"#f66743"}
             containerStyles="items-center rounded"
             textStyles="text-typography-700"
           />
@@ -117,26 +118,21 @@ const TaskDetailScreen = () => {
         {/* Task Details */}
         <Animated.View
           style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "#262627",
             opacity: fadeAnim,
-            borderRadius: 15,
-            padding: 20,
           }}
+          className="flex-1 justify-center items-center bg-grayscale-300 dark:bg-grayscale-800  rounded-3xl p-6"
         >
-          <Text className="text-2xl font-Inter_600SemiBold text-primary-50 mb-4">
+          <Text className="text-2xl font-Inter_600SemiBold text-textLight dark:text-textDark mb-4">
             {taskDetails.title}
           </Text>
-          <Text className="text-lg text-primary-100 font-Inter_400Regular">
+          <Text className="text-lg font-Inter_400Regular text-textLight dark:text-textDark">
             {taskDetails.description}
           </Text>
-          <Text className="text-sm text-primary-300 font-Inter_400Regular mt-2">
+          <Text className="text-sm  font-Inter_400Regular mt-2 text-textLight dark:text-textDark">
             Due Date: {taskDetails.dueDate}
           </Text>
           <Text
-            className={`text-sm font-Inter_400Regular mt-4 ${
+            className={`text-sm font-Inter_400Regular mt-4  ${
               taskDetails.status === "completed"
                 ? "text-primary-100"
                 : "text-primary-500"
@@ -191,7 +187,7 @@ const TaskDetailScreen = () => {
           </View>
         </Modal>
 
-        <StatusBar backgroundColor="transparent" style="light" />
+        <StatusBar backgroundColor="transparent" style="auto" />
       </SafeAreaView>
     </View>
   );

@@ -30,7 +30,7 @@ const SearchInput = ({
       <View className="w-full flex-row items-center   ">
         <Ionicons name="search-outline" size={24} color="white" />
         <TextInput
-          className="font-Inter_400Regular text-base text-primary-50  "
+          className="font-Inter_400Regular text-base text-textLight dark:text-textDark  "
           value={value}
           placeholder={placeholder}
           onChangeText={onChangeText}
